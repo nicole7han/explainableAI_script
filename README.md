@@ -30,5 +30,4 @@ Intructions for research assistants in the VIU lab to run psychopy experiment.
 1. go to the folder Data/Data/
 2. find the folder name with your subject id 
 <img width="784" alt="Screen Shot 2021-07-14 at 9 39 11 AM" src="https://user-images.githubusercontent.com/16929413/125659772-4c1b6472-d2e7-4c92-856a-d04f01c3e1fc.png">
-4. zip the file
-5. upload zip file to google drive: https://drive.google.com/drive/folders/1pIHzftLmrqEmYD4P1dDDuoA2RNAZqN1V?usp=sharing
+4. zip the file and upload zip file to google drive: https://drive.google.com/drive/folders/1pIHzftLmrqEmYD4P1dDDuoA2RNAZqN1V?usp=sharing
