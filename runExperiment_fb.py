@@ -249,7 +249,7 @@ for thisTrial in trials:
                         feedbk_text.draw()
 
                     elif corrAns == 0 and resp == 1: # false positive trials
-                        explan = stim_info.loc[stim_info['stim']==thisTrial['image'].split("/")[-1][:-4]]['feedback'].item()
+                        explan = stim_info.loc[stim_info['stim']==os.path.split(thisTrial['image'])[-1][:-4]]['feedback'].item()
                         feedback_text = "Incorrect! "+ explan.split('. ')[0] + '.\n' + \
                                         explan.split('. ')[1].split(',')[0] + ',\n' + \
                                         explan.split('. ')[1].split(',')[1] + ',\n' + \
@@ -263,7 +263,7 @@ for thisTrial in trials:
                         feedbk_text.draw()
 
                     elif corrAns == 0 and resp == 0: # correct rejection trials
-                        explan = stim_info.loc[stim_info['stim']==thisTrial['image'].split("/")[-1][:-4]]['feedback'].item()
+                        explan = stim_info.loc[stim_info['stim']==os.path.split(thisTrial['image'])[-1][:-4]]['feedback'].item()
                         feedback_text = "Correct! " + explan.split('. ')[0] + '.\n' + \
                                         explan.split('. ')[1].split(',')[0] + ',\n' + \
                                         explan.split('. ')[1].split(',')[1] + ',\n' + \
