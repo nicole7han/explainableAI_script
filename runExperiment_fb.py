@@ -15,11 +15,25 @@ current_path = os.path.abspath(os.getcwd())
 stim_path = "{}/Stimuli".format(current_path)
 data_path = "{}/Data".format(current_path)
 script_path = current_path
-N = len(pd.read_excel('{}/block1_stim_path.xlsx'.format(stim_path))) #number of trials per block
+
+# set up block_path.xlsx
+blocks = glob.glob("{}/block*".format(stim_path))
+blocks = [f for f in blocks if "xlsx" not in f]
+blocks.sort()
+stim_info = pd.read_excel('{}/stim_info.xlsx'.format(stim_path))
+for b in range(len(blocks)):
+    df = pd.DataFrame(columns=['image', 'corrAns'])
+    stims = glob.glob("{}/*.jpg".format(blocks[b]))
+
+    for i in stims:
+        df = df.append({'image':i, 'corrAns':1 if "target" in i else 0}, ignore_index=True)
+
+    df.to_excel('{}/block{}_stim_path.xlsx'.format(stim_path, b+1), index=None)
+
 
 W, H = 1920, 1080
 v_W, v_H = 1000, 800
-# os.chdir(script_path)
+N = len(pd.read_excel('{}/block1_stim_path.xlsx'.format(stim_path))) #number of trials per block
 
 # get subject info
 myDlg = gui.Dlg(title="Target vs Distractor Learning")
