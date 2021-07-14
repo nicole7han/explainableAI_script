@@ -1,9 +1,3 @@
-## NEXT STEPS ##
-# each block 100 target 100 distractor
-# automate check where was left last time
-# pick up from where was left
-
-
 from __future__ import absolute_import, division
 from psychopy.data import TrialHandler, importConditions
 from psychopy import locale_setup, sound, gui, visual, core, data, event, logging
@@ -16,15 +10,11 @@ from numpy import (sin, cos, tan, log, log10, pi, average,
 from numpy.random import random, randint, normal, shuffle
 import os, sys, glob, json
 
-# # set up path
-# script_path = "C:\\home\\Experiments\\Nicole\\Gaze_AllFree\\Scripts"
-# data_path = "C:\\home\\Experiments\\Nicole\\Gaze_AllFree\\Intact"
-# stim_path = "C:\\home\\Experiments\\Nicole\\Gaze_AllFree\\Intact\\Stimuli"
-# orien_head_path = "C:\\home\\Experiments\\Nicole\\Gaze_AllFree\\Scripts\\boundingbox_gaze-orienting people head"
-
-stim_path = "/Users/nicolehan/Documents/Research/Explainable AI/Stimuli"
-data_path = "/Users/nicolehan/Documents/Research/Explainable AI/Data"
-script_path = "/Users/nicolehan/Documents/Research/Explainable AI"
+# set up path
+current_path = os.path.abspath(os.getcwd())
+stim_path = "{}/Stimuli".format(current_path)
+data_path = "{}/Data".format(current_path)
+script_path = current_path
 N = len(pd.read_excel('{}/block1_stim_path.xlsx'.format(stim_path))) #number of trials per block
 
 W, H = 1920, 1080
@@ -102,31 +92,31 @@ trial_num = visual.TextStim(win=win, name='trial_num',
 
 ## response screen ##
 target_button = visual.Rect(win=win, name='Target',
-    pos=(-200, -80),width = 250, height = 100, opacity = .8,
+    pos=(-200, -60),width = 200, height = 80, opacity = .8,
     lineColor=(0, 142/255.0, 18/255.0), lineColorSpace='rgb',
     fillColor=(0, 142/255.0, 18/255.0), fillColorSpace='rgb')
 target_text = visual.TextStim(win=win, name='presentTxt',
     text='Target',
     font='Arial',
-    units='pix', pos=[-200, -80], height=28, wrapWidth=800, ori=0,
+    units='pix', pos=[-200, -60], height=28, wrapWidth=800, ori=0,
     color=[1,1,1], colorSpace='rgb', opacity=1,
     depth=0.0)
 
 distractor_button = visual.Rect(win=win, name='Distractor',
-    pos=(200, -80),width = 250, height = 100,opacity = .8,
+    pos=(200, -60),width = 200, height = 80,opacity = .8,
     lineColor=(183/255.0, 28/255.0, 0), lineColorSpace='rgb',
     fillColor=(183/255.0, 28/255.0, 0), fillColorSpace='rgb')
 distractor_text = visual.TextStim(win=win, name='absentTxt',
     text='Distractor',
     font='Arial',
-    units='pix', pos=[200, -80], height=28, wrapWidth=800, ori=0,
+    units='pix', pos=[200, -60], height=28, wrapWidth=800, ori=0,
     color=[1,1,1], colorSpace='rgb', opacity=1,
     depth=0.0)
     
 slider = visual.Slider(win=win, name='confidence',
                        ticks=(1, 2, 3, 4, 5), granularity=1,
                        labels=['least confident', '      ', '      ', '      ', 'most confident'],
-                       size=(500, 40), pos=[0, -180], units='pix',
+                       size=(500, 40), pos=[0, -140], units='pix',
                        style= ["radio"],color=[1,1,1],colorSpace='rgb',opacity=1,)
 
 ## Thanks screen ##
@@ -207,6 +197,9 @@ for thisTrial in trials:
                     core.quit()
 
             if "space" in theseKeys and PresentConfidence:
+                slider.reset()
+                newrow = {'image': imageName, 'corr_ans': corrAns, 'resp': resp, 'conf': confidence}
+                dataFile = dataFile.append(newrow, ignore_index=True)
                 ContinueThisRoutine = False
 
             if mouse.isPressedIn(target_button): #select target or distractor
@@ -219,57 +212,55 @@ for thisTrial in trials:
             if PresentConfidence: #select confidence
                 slider.draw()
                 confidence = slider.getRating()
-                newrow = {'image': imageName, 'corr_ans': corrAns, 'resp': resp, 'conf': confidence}
-                dataFile = dataFile.append(newrow, ignore_index=True)
 
-            if confidence != None:
-                if corrAns == resp == 1: # hit trials
-                    feedback_text = "Correct! This is a target."
-                    feedbk_text = visual.TextStim(win=win, name='feedback',
-                                                  text=feedback_text,
-                                                  font='Arial',
-                                                  units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
-                                                  color=[1, 1, 1], colorSpace='rgb', opacity=1,
-                                                  depth=0.0)
-                    feedbk_text.draw()
+                if confidence != None:
+                    if corrAns == resp == 1: # hit trials
+                        feedback_text = "Correct! This is a target."
+                        feedbk_text = visual.TextStim(win=win, name='feedback',
+                                                      text=feedback_text,
+                                                      font='Arial',
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      color=[1, 1, 1], colorSpace='rgb', opacity=1,
+                                                      depth=0.0)
+                        feedbk_text.draw()
 
-                elif corrAns == 1 and resp == 0: # miss trials
-                    feedback_text = "Incorrect! This is a target."
-                    feedbk_text = visual.TextStim(win=win, name='feedback',
-                                                  text=feedback_text,
-                                                  font='Arial',
-                                                  units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
-                                                  color=[1, 1, 1], colorSpace='rgb', opacity=1,
-                                                  depth=0.0)
-                    feedbk_text.draw()
+                    elif corrAns == 1 and resp == 0: # miss trials
+                        feedback_text = "Incorrect! This is a target."
+                        feedbk_text = visual.TextStim(win=win, name='feedback',
+                                                      text=feedback_text,
+                                                      font='Arial',
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      color=[1, 1, 1], colorSpace='rgb', opacity=1,
+                                                      depth=0.0)
+                        feedbk_text.draw()
 
-                elif corrAns == 0 and resp == 1: # false positive trials
-                    explan = stim_info.loc[stim_info['stim']==thisTrial['image'].split("/")[-1][:-4]]['feedback'].item()
-                    feedback_text = "Incorrect! "+ explan.split('. ')[0] + '.\n' + \
-                                    explan.split('. ')[1].split(',')[0] + ',\n' + \
-                                    explan.split('. ')[1].split(',')[1] + ',\n' + \
-                                    explan.split('. ')[1].split(',')[2]
-                    feedbk_text = visual.TextStim(win=win, name='feedback',
-                                                  text=feedback_text,
-                                                  font='Arial',
-                                                  units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
-                                                  color=[1, 1, 1], colorSpace='rgb', opacity=1,
-                                                  depth=0.0)
-                    feedbk_text.draw()
+                    elif corrAns == 0 and resp == 1: # false positive trials
+                        explan = stim_info.loc[stim_info['stim']==thisTrial['image'].split("/")[-1][:-4]]['feedback'].item()
+                        feedback_text = "Incorrect! "+ explan.split('. ')[0] + '.\n' + \
+                                        explan.split('. ')[1].split(',')[0] + ',\n' + \
+                                        explan.split('. ')[1].split(',')[1] + ',\n' + \
+                                        explan.split('. ')[1].split(',')[2]
+                        feedbk_text = visual.TextStim(win=win, name='feedback',
+                                                      text=feedback_text,
+                                                      font='Arial',
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      color=[1, 1, 1], colorSpace='rgb', opacity=1,
+                                                      depth=0.0)
+                        feedbk_text.draw()
 
-                elif corrAns == 0 and resp == 0: # correct rejection trials
-                    explan = stim_info.loc[stim_info['stim']==thisTrial['image'].split("/")[-1][:-4]]['feedback'].item()
-                    feedback_text = "Correct! " + explan.split('. ')[0] + '.\n' + \
-                                    explan.split('. ')[1].split(',')[0] + ',\n' + \
-                                    explan.split('. ')[1].split(',')[1] + ',\n' + \
-                                    explan.split('. ')[1].split(',')[2]
-                    feedbk_text = visual.TextStim(win=win, name='feedback',
-                                                  text=feedback_text,
-                                                  font='Arial',
-                                                  units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
-                                                  color=[1, 1, 1], colorSpace='rgb', opacity=1,
-                                                  depth=0.0)
-                    feedbk_text.draw()
+                    elif corrAns == 0 and resp == 0: # correct rejection trials
+                        explan = stim_info.loc[stim_info['stim']==thisTrial['image'].split("/")[-1][:-4]]['feedback'].item()
+                        feedback_text = "Correct! " + explan.split('. ')[0] + '.\n' + \
+                                        explan.split('. ')[1].split(',')[0] + ',\n' + \
+                                        explan.split('. ')[1].split(',')[1] + ',\n' + \
+                                        explan.split('. ')[1].split(',')[2]
+                        feedbk_text = visual.TextStim(win=win, name='feedback',
+                                                      text=feedback_text,
+                                                      font='Arial',
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      color=[1, 1, 1], colorSpace='rgb', opacity=1,
+                                                      depth=0.0)
+                        feedbk_text.draw()
 
         event.clearEvents()
         trial_iter = trial_iter+1
