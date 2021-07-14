@@ -1,6 +1,6 @@
 # explainableAI_script
 
-Intructions for research assistant in the VIU lab to run psychopy experiment.
+Intructions for research assistants in the VIU lab to run psychopy experiment.
 
 ## Set up
 1. download and install psychopy3: from:https://www.psychopy.org/download.html
