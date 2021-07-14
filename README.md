@@ -1,3 +1,4 @@
+
 # explainableAI_script
 
 Intructions for research assistants in the VIU lab to run psychopy experiment.
@@ -12,7 +13,8 @@ Intructions for research assistants in the VIU lab to run psychopy experiment.
 
 
 ## Run the experiment
-1. open psychopy3
+1. open psychopy3, there will be multiple windows opening up, make sure you use the window with "Psychopy Coder".
+<img width="1019" alt="Screen Shot 2021-07-14 at 9 58 26 AM" src="https://user-images.githubusercontent.com/16929413/125662428-eab3d029-3a41-43b3-a608-f028fd01904f.png">
 
 2. click "file" -> "open", select the file "runExperiment_fb.py", click "open"
 <img width="475" alt="Screen Shot 2021-07-14 at 9 35 56 AM" src="https://user-images.githubusercontent.com/16929413/125659369-52ee5100-0e04-4586-9eb4-36782449cf04.png">
