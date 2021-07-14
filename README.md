@@ -8,7 +8,7 @@ Intructions for research assistants in the VIU lab to run psychopy experiment.
 2. download this github file by clicking "code" -> "download zip"
 <img width="427" alt="Screen Shot 2021-07-14 at 9 33 54 AM" src="https://user-images.githubusercontent.com/16929413/125659060-f470b07b-d5c4-4e6d-bdf2-ccb924c68dc4.png">
 
-3. unzip the file and move the whole folder "explainableAI_script-main" to a directory on your computer.
+3. unzip the file and move the folder "explainableAI_script-main" to a directory on your computer.
 
 
 ## Run the experiment
