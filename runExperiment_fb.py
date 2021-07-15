@@ -6,7 +6,7 @@ from psychopy.constants import (NOT_STARTED, STARTED, PLAYING, PAUSED,
 import numpy as np  # whole numpy lib is available, prepend 'np.'
 import pandas as pd
 from numpy import (sin, cos, tan, log, log10, pi, average,
-                   sqrt, std, deg2rad, rad2deg, linspace, asarray)
+                    sqrt, std, deg2rad, rad2deg, linspace, asarray)
 from numpy.random import random, randint, normal, shuffle
 import os, sys, glob, json
 
@@ -81,8 +81,8 @@ win = visual.Window((1280, 1024), fullscr=False, allowGUI=True, winType='pyglet'
 """ Initialize Compoenents """
 ## instructions ##
 instrText = visual.TextStim(win=win, name='instrText',
-    text="Welcome to the Experiment! In this experiment you are trying to learn a target and a distractor stimuli.\
-        \n  They would be presented in a random order. Please make response by clicking. \
+    text="Welcome to the Experiment! In this experiment you are trying to discriminate a target and a distractor stimuli.\
+        \n  They would be presented in a random order. \
         \n\n \
         Don't feel frustracted if you get it wrong at the beginning because it is supposed to be challenging. \n \
         The feedback is supposed to help you learn as you do more trials.\
@@ -131,7 +131,7 @@ slider = visual.Slider(win=win, name='confidence',
                        ticks=(1, 2, 3, 4, 5), granularity=1,
                        labels=['least confident', '      ', '      ', '      ', 'most confident'],
                        size=(500, 40), pos=[0, -140], units='pix',
-                       style= ["radio"],color=[1,1,1],colorSpace='rgb',opacity=1,)
+                       style= ["whiteOnBlack"],color=[1,1,1],colorSpace='rgb',opacity=1,)
 
 ## Thanks screen ##
 thanksText = visual.TextStim(win=win, name='thanksText',
