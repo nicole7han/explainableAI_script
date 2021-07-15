@@ -16,7 +16,8 @@ stim_path = "{}/Stimuli".format(current_path)
 data_path = "{}/Data".format(current_path)
 script_path = current_path
 
-# set up block_path.xlsx
+
+# set up stimuli block_path.xlsx
 blocks = glob.glob("{}/block*".format(stim_path))
 blocks = [f for f in blocks if "xlsx" not in f]
 blocks.sort()
@@ -82,18 +83,53 @@ win = visual.Window((1280, 1024), fullscr=False, allowGUI=True, winType='pyglet'
 ## instructions ##
 instrText = visual.TextStim(win=win, name='instrText',
     text="Welcome to the Experiment! In this experiment you are trying to discriminate a target and a distractor stimuli.\
-        \n  They would be presented in a random order. \
+        \n  They will be presented in a random order. \
         \n\n \
-        Don't feel frustracted if you get it wrong at the beginning because it is supposed to be challenging. \n \
+        Don't feel frustrated if you get it wrong at the beginning because it is supposed to be challenging. \n \
         The feedback is supposed to help you learn as you do more trials.\
         \n\n \
-        1) Press space bar to start each trial. \
+        1) Press the space bar to start each trial. \
         \n\n \
-        2) Click to respond and see the feedback.",
+        2) Click to respond.",
     font='Arial', 
     units='pix', pos=[0, 0], height=30, wrapWidth=850, ori=0, 
     color=[1,1,1], colorSpace='rgb', opacity=1,
     depth=0.0)
+
+## examples ##
+examText = visual.TextStim(win=win, name='examText',
+    text="The target and the distractor vary in different features. \n"
+         "Here are some examples.",
+    font='Arial',
+    units='pix', pos=[0, 450], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
+
+example = visual.ImageStim(
+    win=win, image='{}/examples/example.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(-350, 0), size=[350, 350],
+    colorSpace='rgb', opacity=1
+)
+length = visual.ImageStim(
+    win=win, image='{}/examples/length.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(250, 260), size=[550, 260],
+    colorSpace='rgb', opacity=1
+)
+width = visual.ImageStim(
+    win=win, image='{}/examples/width.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(250, 0), size=[550, 260],
+    colorSpace='rgb', opacity=1
+)
+angle = visual.ImageStim(
+    win=win, image='{}/examples/angle.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(250, -260), size=[550, 260],
+    colorSpace='rgb', opacity=1
+)
+
 
 ## trial iteratior ##
 trial_num = visual.TextStim(win=win, name='trial_num',
@@ -154,11 +190,45 @@ while ContinueThisRoutine :
     
     theseKeys = event.getKeys()
     if "escape" in theseKeys:
-        endExpNow = True
-    if len(theseKeys) > 0: 
+        dlg = gui.Dlg(title='quit experiment?', screen=-1)
+        dlg.addText('Are you sure you want to quit the experiment?')
+        dlg.show()
+        if dlg.OK:
+            dataFile.to_excel(filename + '.xlsx', index = None)
+            core.quit()
+    if "space" in theseKeys:
         instrText.setAutoDraw(False)
         ContinueThisRoutine = False
         break
+
+""" Present Examples """
+ContinueThisRoutine = True
+while ContinueThisRoutine:
+    examText.setAutoDraw(True)
+    example.setAutoDraw(True)
+    length.setAutoDraw(True)
+    width.setAutoDraw(True)
+    angle.setAutoDraw(True)
+    win.flip()
+
+    theseKeys = event.getKeys("escape","space")
+    if "escape" in theseKeys:
+        dlg = gui.Dlg(title='quit experiment?', screen=-1)
+        dlg.addText('Are you sure you want to quit the experiment?')
+        dlg.show()
+        if dlg.OK:
+            dataFile.to_excel(filename + '.xlsx', index = None)
+            core.quit()
+    if "space" in theseKeys:
+        examText.setAutoDraw(False)
+        example.setAutoDraw(False)
+        length.setAutoDraw(False)
+        width.setAutoDraw(False)
+        angle.setAutoDraw(False)
+        ContinueThisRoutine = False
+        break
+
+
 
 """ Set up and Present Trials in Random Order"""
 stim_list = stim_path + os.sep + 'block{}'.format(expInfo['Block_num']) +'_stim_path.xlsx'
