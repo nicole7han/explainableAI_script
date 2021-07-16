@@ -76,7 +76,7 @@ filename = data_path + os.sep + u'data' + os.sep + 'subj' + expInfo['Participant
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
 # Setup the Window
-win = visual.Window((1280, 1024), fullscr=False, allowGUI=True, winType='pyglet',
+win = visual.Window((1280,1024), fullscr=False, allowGUI=True, winType='pyglet',
         monitor='testMonitor', units ='pix', screen=0)
 
 """ Initialize Compoenents """
@@ -264,12 +264,12 @@ for thisTrial in trials:
                 pos=(0, 250), size=[500, 500],
                 colorSpace='rgb', opacity=1
             )
-            trial_num.draw()
-            img.draw()
-            target_button.draw()
-            target_text.draw()
-            distractor_button.draw()
-            distractor_text.draw()
+            trial_num.setAutoDraw(True)
+            img.setAutoDraw(True)
+            target_button.setAutoDraw(True)
+            target_text.setAutoDraw(True)
+            distractor_button.setAutoDraw(True)
+            distractor_text.setAutoDraw(True)
             win.flip()
 
             if "escape" in theseKeys:
@@ -284,6 +284,16 @@ for thisTrial in trials:
                 slider.reset()
                 newrow = {'image': imageName, 'corr_ans': corrAns, 'resp': resp, 'conf': confidence}
                 dataFile = dataFile.append(newrow, ignore_index=True)
+
+                trial_num.setAutoDraw(False)
+                img.setAutoDraw(False)
+                target_button.setAutoDraw(False)
+                target_text.setAutoDraw(False)
+                distractor_button.setAutoDraw(False)
+                distractor_text.setAutoDraw(False)
+                # slider.setAutoDraw(False)
+                # feedbk_text.setAutoDraw(False)
+                # win.flip()
                 ContinueThisRoutine = False
 
             if mouse.isPressedIn(target_button): #select target or distractor
