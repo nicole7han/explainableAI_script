@@ -280,7 +280,7 @@ for thisTrial in trials:
                     dataFile.to_excel(filename + '.xlsx', index = None)
                     core.quit()
 
-            if "space" in theseKeys and PresentConfidence:
+            if "space" in theseKeys and PresentConfidence and confidence!=None:
                 slider.reset()
                 newrow = {'image': imageName, 'corr_ans': corrAns, 'resp': resp, 'conf': confidence}
                 dataFile = dataFile.append(newrow, ignore_index=True)
@@ -358,7 +358,6 @@ for thisTrial in trials:
 
         event.clearEvents()
         trial_iter = trial_iter+1
-
 dataFile.to_excel(filename+'.xlsx', index = None)
 
 
@@ -368,10 +367,7 @@ ContinueThisRoutine = True
 keyResponse = event.BuilderKeyResponse()
 t = 0
 while ContinueThisRoutine:
-    win.flip()
     thanksText.setAutoDraw(True)
-    # win.flip()
-
     theseKeys = event.getKeys()
     if len(theseKeys) > 0:
         thanksText.setAutoDraw(False)
