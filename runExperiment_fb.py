@@ -188,7 +188,7 @@ while ContinueThisRoutine :
     instrText.setAutoDraw(True)
     win.flip()
     
-    theseKeys = event.getKeys()
+    theseKeys = event.getKeys(keyList=['escape', 'space'])
     if "escape" in theseKeys:
         dlg = gui.Dlg(title='quit experiment?', screen=-1)
         dlg.addText('Are you sure you want to quit the experiment?')
@@ -211,7 +211,7 @@ while ContinueThisRoutine:
     angle.setAutoDraw(True)
     win.flip()
 
-    theseKeys = event.getKeys("escape","space")
+    theseKeys = event.getKeys(keyList=['escape', 'space'])
     if "escape" in theseKeys:
         dlg = gui.Dlg(title='quit experiment?', screen=-1)
         dlg.addText('Are you sure you want to quit the experiment?')
