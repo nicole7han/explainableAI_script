@@ -203,14 +203,13 @@ while ContinueThisRoutine :
 
 """ Present Examples """
 ContinueThisRoutine = True
-while ContinueThisRoutine:
-    examText.setAutoDraw(True)
-    example.setAutoDraw(True)
-    length.setAutoDraw(True)
-    width.setAutoDraw(True)
-    angle.setAutoDraw(True)
-    win.flip()
+examText.setAutoDraw(True)
+example.setAutoDraw(True)
+length.setAutoDraw(True)
+width.setAutoDraw(True)
+angle.setAutoDraw(True)
 
+while ContinueThisRoutine:
     theseKeys = event.getKeys(keyList=['escape', 'space'])
     if "escape" in theseKeys:
         dlg = gui.Dlg(title='quit experiment?', screen=-1)
@@ -227,7 +226,7 @@ while ContinueThisRoutine:
         angle.setAutoDraw(False)
         ContinueThisRoutine = False
         break
-
+    win.flip()
 
 
 """ Set up and Present Trials in Random Order"""
@@ -251,27 +250,27 @@ for thisTrial in trials:
     confidence = None
     if thisTrial != None and thisTrial['image'] not in finished_trials: #check if we have done this trial before
         keyResponse = event.BuilderKeyResponse()
+        mouse = event.Mouse()
+        ## present image ##
+        trial_num.text = "Trial:{}/{}".format(trial_iter, N)
+        imageName = thisTrial["image"]
+        corrAns = thisTrial["corrAns"]
+        img = visual.ImageStim(
+            win=win, image=imageName,
+            name='target1', mask=None,
+            pos=(0, 250), size=[500, 500],
+            colorSpace='rgb', opacity=1
+        )
+        trial_num.setAutoDraw(True)
+        img.setAutoDraw(True)
+        target_button.setAutoDraw(True)
+        target_text.setAutoDraw(True)
+        distractor_button.setAutoDraw(True)
+        distractor_text.setAutoDraw(True)
+        
         while ContinueThisRoutine:
             theseKeys = event.getKeys(keyList=['escape', 'space'])
-            mouse = event.Mouse()
-            ## present image ##
-            trial_num.text = "Trial:{}/{}".format(trial_iter, N)
-            imageName = thisTrial["image"]
-            corrAns = thisTrial["corrAns"]
-            img = visual.ImageStim(
-                win=win, image=imageName,
-                name='target1', mask=None,
-                pos=(0, 250), size=[500, 500],
-                colorSpace='rgb', opacity=1
-            )
-            trial_num.setAutoDraw(True)
-            img.setAutoDraw(True)
-            target_button.setAutoDraw(True)
-            target_text.setAutoDraw(True)
-            distractor_button.setAutoDraw(True)
-            distractor_text.setAutoDraw(True)
             win.flip()
-
             if "escape" in theseKeys:
                 dlg = gui.Dlg(title='quit experiment?', screen=-1)
                 dlg.addText('Are you sure you want to quit the experiment?')
@@ -293,7 +292,7 @@ for thisTrial in trials:
                 distractor_text.setAutoDraw(False)
                 # slider.setAutoDraw(False)
                 # feedbk_text.setAutoDraw(False)
-                # win.flip()
+                win.flip()
                 ContinueThisRoutine = False
 
             if mouse.isPressedIn(target_button): #select target or distractor
