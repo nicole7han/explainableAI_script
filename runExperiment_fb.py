@@ -76,7 +76,7 @@ filename = data_path + os.sep + u'data' + os.sep + 'subj' + expInfo['Participant
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
 # Setup the Window
-win = visual.Window( fullscr=True, allowGUI=True, winType='pyglet',
+win = visual.Window(size=(1200, 800),fullscr=False, allowGUI=True, winType='pyglet',
         monitor='testMonitor', units ='pix', screen=0)
 
 """ Initialize Compoenents """
