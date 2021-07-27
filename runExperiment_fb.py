@@ -312,7 +312,7 @@ for thisTrial in trials:
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -350], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
@@ -322,7 +322,7 @@ for thisTrial in trials:
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -350], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
@@ -336,7 +336,7 @@ for thisTrial in trials:
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -350], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
@@ -350,7 +350,7 @@ for thisTrial in trials:
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -350], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
