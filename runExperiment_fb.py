@@ -76,7 +76,7 @@ filename = data_path + os.sep + u'data' + os.sep + 'subj' + expInfo['Participant
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
 # Setup the Window
-win = visual.Window(size=(1200, 800),fullscr=False, allowGUI=True, winType='pyglet',
+win = visual.Window(size=(1200, 900),fullscr=False, allowGUI=True, winType='pyglet',
         monitor='testMonitor', units ='pix', screen=0)
 
 """ Initialize Compoenents """
@@ -135,7 +135,7 @@ angle = visual.ImageStim(
 trial_num = visual.TextStim(win=win, name='trial_num',
     text='Trial: 1/{}'.format(N),
     font='Arial',
-    units='pix', pos=[-450, 450], height=40, wrapWidth=800, ori=0, 
+    units='pix', pos=[-450, 400], height=40, wrapWidth=800, ori=0,
     color=[1, 1, 1], colorSpace='rgb', opacity=1,
     depth=0.0);
 
@@ -258,7 +258,7 @@ for thisTrial in trials:
         img = visual.ImageStim(
             win=win, image=imageName,
             name='target1', mask=None,
-            pos=(0, 250), size=[500, 500],
+            pos=(0, 250), size=[480, 480],
             colorSpace='rgb', opacity=1
         )
         trial_num.setAutoDraw(True)
