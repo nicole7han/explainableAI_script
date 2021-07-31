@@ -56,7 +56,7 @@ num_blocks = len(subj_files)
 continue_last = False
 finished_trials = []
 dataFile = pd.DataFrame(columns=["image", "corr_ans", "resp"]) #start a new dataframe
-block_num = 1
+block_num = num_blocks
 
 if num_blocks > 0:
     last_file = [f for f in subj_files if expInfo['Participant'] + '_{}'.format(num_blocks) in f]
