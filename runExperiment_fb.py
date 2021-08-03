@@ -68,6 +68,8 @@ if num_blocks > 0:
         finished_trials = last_block['image'].tolist()
         block_num = num_blocks
         dataFile = last_block  # read last block dataframe
+else:
+    block_num = 1
 expInfo['Block_num'] = block_num
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
