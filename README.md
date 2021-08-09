@@ -22,9 +22,7 @@ Intructions for research assistants in the VIU lab to run psychopy experiment.
 3. once you open the file, click "run experiment" button on the top
 <img width="429" alt="Screen Shot 2021-07-14 at 9 31 17 AM" src="https://user-images.githubusercontent.com/16929413/125658921-d5f10c16-29c4-4831-bb11-52d85505828f.png">
 
-4. You can put in your name initials (make sure to keep it consistent between blocks), age, and gender to start!
-<img width="402" alt="Screen Shot 2021-07-20 at 4 17 54 PM" src="https://user-images.githubusercontent.com/16929413/126407059-f74384ef-12cc-4d6d-bbb9-219daeff96a0.png">
-
+4. You can put in your name initials (make sure to keep it the same between blocks), age, and gender to start!
 
 
 
