@@ -103,7 +103,7 @@ examText = visual.TextStim(win=win, name='examText',
     text="The target and the distractor vary in different features. \n"
          "Here are some examples.",
     font='Arial',
-    units='pix', pos=[0, 450], height=30, wrapWidth=850, ori=0,
+    units='pix', pos=[0, 400], height=30, wrapWidth=850, ori=0,
     color=[1,1,1], colorSpace='rgb', opacity=1,
     depth=0.0)
 
@@ -116,19 +116,19 @@ example = visual.ImageStim(
 length = visual.ImageStim(
     win=win, image='{}/examples/length.jpg'.format(stim_path),
     name='target1', mask=None,
-    pos=(250, 260), size=[550, 260],
+    pos=(250, 210), size=[550, 260],
     colorSpace='rgb', opacity=1
 )
 width = visual.ImageStim(
     win=win, image='{}/examples/width.jpg'.format(stim_path),
     name='target1', mask=None,
-    pos=(250, 0), size=[550, 260],
+    pos=(250, -50), size=[550, 260],
     colorSpace='rgb', opacity=1
 )
 angle = visual.ImageStim(
     win=win, image='{}/examples/angle.jpg'.format(stim_path),
     name='target1', mask=None,
-    pos=(250, -260), size=[550, 260],
+    pos=(250, -310), size=[550, 260],
     colorSpace='rgb', opacity=1
 )
 
