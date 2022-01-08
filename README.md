@@ -22,7 +22,7 @@ Intructions for research assistants in the VIU lab to run psychopy experiment.
 3. once you open the file, click "run experiment" button on the top
 <img width="429" alt="Screen Shot 2021-07-14 at 9 31 17 AM" src="https://user-images.githubusercontent.com/16929413/125658921-d5f10c16-29c4-4831-bb11-52d85505828f.png">
 
-4. You can put in your name initials as subject name (e.g., my name is Nicole Han so I put "NH" as my subject name), age, and gender to start! Repeat this process for 6 times and make sure you always put the same subject name (e.g., "NH") each time. DO NOT add numbers to your subject name such as "NH1", "NH2".
+4. Put in your subject name, select age and gender to start. Repeat this process for 6 times and make sure you always put the exact same subject name (e.g., "1") each time.
 
 
 
