@@ -12,7 +12,7 @@ import os, sys, glob, json
 
 # set up path
 current_path = os.path.abspath(os.getcwd())
-stim_path = "{}/Stimuli".format(current_path)
+stim_path = "{}/Stimuli_old".format(current_path)
 data_path = "{}/Data".format(current_path)
 script_path = current_path
 
@@ -106,32 +106,93 @@ examText = visual.TextStim(win=win, name='examText',
     units='pix', pos=[0, 400], height=30, wrapWidth=850, ori=0,
     color=[1,1,1], colorSpace='rgb', opacity=1,
     depth=0.0)
+    
+length1 = visual.ImageStim(
+    win=win, image='{}/examples/length_short.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(-150, 250), size=[200, 200],
+    colorSpace='rgb', opacity=1
+)
+lengthText1 = visual.TextStim(win=win, name='examText',
+    text="shorter length",
+    font='Arial',
+    units='pix', pos=[-150, 250+100], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
+length2 = visual.ImageStim(
+    win=win, image='{}/examples/length_long.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(150, 250), size=[200, 200],
+    colorSpace='rgb', opacity=1
+)
+lengthText2 = visual.TextStim(win=win, name='examText',
+    text="longer length",
+    font='Arial',
+    units='pix', pos=[150, 250+100], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
+width1 = visual.ImageStim(
+    win=win, image='{}/examples/width_small.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(-150, 0), size=[200, 200],
+    colorSpace='rgb', opacity=1
+)
+widthText1 = visual.TextStim(win=win, name='examText',
+    text="smaller width",
+    font='Arial',
+    units='pix', pos=[-150, 0+100], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
+width2 = visual.ImageStim(
+    win=win, image='{}/examples/width_large.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(150, 0), size=[200, 200],
+    colorSpace='rgb', opacity=1
+)
+widthText2 = visual.TextStim(win=win, name='examText',
+    text="larger width",
+    font='Arial',
+    units='pix', pos=[150, 0+100], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
+    
+angle1 = visual.ImageStim(
+    win=win, image='{}/examples/angle_hori.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(-150, -250), size=[200, 200],
+    colorSpace='rgb', opacity=1
+)
+angleText1 = visual.TextStim(win=win, name='examText',
+    text="more horizontally",
+    font='Arial',
+    units='pix', pos=[-150, -250+100], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
+angle2 = visual.ImageStim(
+    win=win, image='{}/examples/angle_verti.jpg'.format(stim_path),
+    name='target1', mask=None,
+    pos=(150, -250), size=[200, 200],
+    colorSpace='rgb', opacity=1
+)
+angleText2 = visual.TextStim(win=win, name='examText',
+    text="more vertically",
+    font='Arial',
+    units='pix', pos=[150, -250+100], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
 
-example = visual.ImageStim(
-    win=win, image='{}/examples/example.jpg'.format(stim_path),
+cooccurance = visual.ImageStim(
+    win=win, image='{}/examples/co-occurance.jpg'.format(stim_path),
     name='target1', mask=None,
-    pos=(-350, 0), size=[350, 350],
+    pos=(0, 0), size=[350, 350],
     colorSpace='rgb', opacity=1
 )
-length = visual.ImageStim(
-    win=win, image='{}/examples/length.jpg'.format(stim_path),
-    name='target1', mask=None,
-    pos=(250, 210), size=[550, 260],
-    colorSpace='rgb', opacity=1
-)
-width = visual.ImageStim(
-    win=win, image='{}/examples/width.jpg'.format(stim_path),
-    name='target1', mask=None,
-    pos=(250, -50), size=[550, 260],
-    colorSpace='rgb', opacity=1
-)
-angle = visual.ImageStim(
-    win=win, image='{}/examples/angle.jpg'.format(stim_path),
-    name='target1', mask=None,
-    pos=(250, -310), size=[550, 260],
-    colorSpace='rgb', opacity=1
-)
-
+cooccuranceText = visual.TextStim(win=win, name='examText',
+    text="The stimuli would have three co-occurance objects in various locations: 1.a four-edge polygon. 2.a triangle. 3.a circle.",
+    font='Arial',
+    units='pix', pos=[0, 300], height=30, wrapWidth=850, ori=0,
+    color=[1,1,1], colorSpace='rgb', opacity=1,
+    depth=0.0)
 
 ## trial iteratior ##
 trial_num = visual.TextStim(win=win, name='trial_num',
@@ -144,31 +205,31 @@ trial_num = visual.TextStim(win=win, name='trial_num',
 
 ## response screen ##
 target_button = visual.Rect(win=win, name='Target',
-    pos=(-200, -60),width = 200, height = 80, opacity = .8,
+    pos=(-200, 0),width = 200, height = 80, opacity = .8,
     lineColor=(0, 142/255.0, 18/255.0), lineColorSpace='rgb',
     fillColor=(0, 142/255.0, 18/255.0), fillColorSpace='rgb')
 target_text = visual.TextStim(win=win, name='presentTxt',
     text='Target',
     font='Arial',
-    units='pix', pos=[-200, -60], height=28, wrapWidth=800, ori=0,
+    units='pix', pos=[-200, 0], height=28, wrapWidth=800, ori=0,
     color=[1,1,1], colorSpace='rgb', opacity=1,
     depth=0.0)
 
 distractor_button = visual.Rect(win=win, name='Distractor',
-    pos=(200, -60),width = 200, height = 80,opacity = .8,
+    pos=(200, 0),width = 200, height = 80,opacity = .8,
     lineColor=(183/255.0, 28/255.0, 0), lineColorSpace='rgb',
     fillColor=(183/255.0, 28/255.0, 0), fillColorSpace='rgb')
 distractor_text = visual.TextStim(win=win, name='absentTxt',
     text='Distractor',
     font='Arial',
-    units='pix', pos=[200, -60], height=28, wrapWidth=800, ori=0,
+    units='pix', pos=[200, 0], height=28, wrapWidth=800, ori=0,
     color=[1,1,1], colorSpace='rgb', opacity=1,
     depth=0.0)
     
 slider = visual.Slider(win=win, name='confidence',
                        ticks=(1, 2, 3, 4, 5), granularity=1,
                        labels=['least confident', '      ', '      ', '      ', 'most confident'],
-                       size=(500, 40), pos=[0, -140], units='pix',
+                       size=(500, 40), pos=[0, -80], units='pix',
                        style= ["whiteOnBlack"],color=[1,1,1],colorSpace='rgb',opacity=1,)
 
 ## Thanks screen ##
@@ -189,7 +250,6 @@ while ContinueThisRoutine :
     t = trialClock.getTime()
     instrText.setAutoDraw(True)
     win.flip()
-    
     theseKeys = event.getKeys(keyList=['escape', 'space'])
     if "escape" in theseKeys:
         dlg = gui.Dlg(title='quit experiment?', screen=-1)
@@ -206,11 +266,20 @@ while ContinueThisRoutine :
 """ Present Examples """
 ContinueThisRoutine = True
 examText.setAutoDraw(True)
-example.setAutoDraw(True)
-length.setAutoDraw(True)
-width.setAutoDraw(True)
-angle.setAutoDraw(True)
+length1.setAutoDraw(True)
+lengthText1.setAutoDraw(True)
+length2.setAutoDraw(True)
+lengthText2.setAutoDraw(True)
+width1.setAutoDraw(True)
+widthText1.setAutoDraw(True)
+width2.setAutoDraw(True)
+widthText2.setAutoDraw(True)
+angle1.setAutoDraw(True)
+angleText1.setAutoDraw(True)
+angle2.setAutoDraw(True)
+angleText2.setAutoDraw(True)
 
+# show examples
 while ContinueThisRoutine:
     theseKeys = event.getKeys(keyList=['escape', 'space'])
     if "escape" in theseKeys:
@@ -222,10 +291,39 @@ while ContinueThisRoutine:
             core.quit()
     if "space" in theseKeys:
         examText.setAutoDraw(False)
-        example.setAutoDraw(False)
-        length.setAutoDraw(False)
-        width.setAutoDraw(False)
-        angle.setAutoDraw(False)
+        length1.setAutoDraw(False)
+        lengthText1.setAutoDraw(False)
+        length2.setAutoDraw(False)
+        lengthText2.setAutoDraw(False)
+        width1.setAutoDraw(False)
+        widthText1.setAutoDraw(False)
+        width2.setAutoDraw(False)
+        widthText2.setAutoDraw(False)
+        angle1.setAutoDraw(False)
+        angleText1.setAutoDraw(False)
+        angle2.setAutoDraw(False)
+        angleText2.setAutoDraw(False)
+        ContinueThisRoutine = False
+        break
+    win.flip()
+
+
+# show co-occurance
+ContinueThisRoutine = True
+cooccurance.setAutoDraw(True)
+cooccuranceText.setAutoDraw(True)
+while ContinueThisRoutine:
+    theseKeys = event.getKeys(keyList=['escape', 'space'])
+    if "escape" in theseKeys:
+        dlg = gui.Dlg(title='quit experiment?', screen=-1)
+        dlg.addText('Are you sure you want to quit the experiment?')
+        dlg.show()
+        if dlg.OK:
+            dataFile.to_excel(filename + '.xlsx', index = None)
+            core.quit()
+    if "space" in theseKeys:
+        cooccurance.setAutoDraw(False)
+        cooccuranceText.setAutoDraw(False)
         ContinueThisRoutine = False
         break
     win.flip()
@@ -260,7 +358,7 @@ for thisTrial in trials:
         img = visual.ImageStim(
             win=win, image=imageName,
             name='target1', mask=None,
-            pos=(0, 250), size=[480, 480],
+            pos=(0, 250), size=[369, 369],
             colorSpace='rgb', opacity=1
         )
         trial_num.setAutoDraw(True)
@@ -292,8 +390,6 @@ for thisTrial in trials:
                 target_text.setAutoDraw(False)
                 distractor_button.setAutoDraw(False)
                 distractor_text.setAutoDraw(False)
-                # slider.setAutoDraw(False)
-                # feedbk_text.setAutoDraw(False)
                 win.flip()
                 ContinueThisRoutine = False
 
@@ -314,7 +410,7 @@ for thisTrial in trials:
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -250], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
@@ -324,35 +420,37 @@ for thisTrial in trials:
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -250], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
 
                     elif corrAns == 0 and resp == 1: # false positive trials
                         explan = stim_info.loc[stim_info['stim']==os.path.split(thisTrial['image'])[-1][:-4]]['feedback'].item()
-                        feedback_text = "Incorrect! "+ explan.split('. ')[0] + '.\n' + \
-                                        explan.split('. ')[1].split(',')[0] + ',\n' + \
-                                        explan.split('. ')[1].split(',')[1] + ',\n' + \
-                                        explan.split('. ')[1].split(',')[2]
+                        feedback_text = "Incorrect! "+ explan
+#                        feedback_text = "Incorrect! "+ explan.split('. ')[0] + '.\n' + \
+#                                        explan.split('. ')[1].split(',')[0] + ',\n' + \
+#                                        explan.split('. ')[1].split(',')[1] + ',\n' + \
+#                                        explan.split('. ')[1].split(',')[2]
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -250], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
 
                     elif corrAns == 0 and resp == 0: # correct rejection trials
                         explan = stim_info.loc[stim_info['stim']==os.path.split(thisTrial['image'])[-1][:-4]]['feedback'].item()
-                        feedback_text = "Correct! " + explan.split('. ')[0] + '.\n' + \
-                                        explan.split('. ')[1].split(',')[0] + ',\n' + \
-                                        explan.split('. ')[1].split(',')[1] + ',\n' + \
-                                        explan.split('. ')[1].split(',')[2]
+                        feedback_text = "Incorrect! "+ explan
+#                        feedback_text = "Correct! " + explan.split('. ')[0] + '.\n' + \
+#                                        explan.split('. ')[1].split(',')[0] + ',\n' + \
+#                                        explan.split('. ')[1].split(',')[1] + ',\n' + \
+#                                        explan.split('. ')[1].split(',')[2]
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
-                                                      units='pix', pos=[0, -300], height=30, wrapWidth=900, ori=0,
+                                                      units='pix', pos=[0, -250], height=30, wrapWidth=900, ori=0,
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()

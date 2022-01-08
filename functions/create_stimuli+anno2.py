@@ -6,6 +6,11 @@ import pandas as pd
 import random
 from scipy.stats import norm, multivariate_normal
 
+def add_noise(stim, sigma=.06):
+    stim[stim == 1] = 140 / 255  # value 1 -> 140/255
+    stim[stim == 0] = .5  # background 0 -> 0.5
+    stimuli = stim + sigma * np.random.randn(stim.shape[0], stim.shape[1])
+    return stimuli
 
 def points_on_circle(radius, imageSizeX, imageSizeY, x0=0, y0=0):
     radius = int(radius*imageSizeX)
@@ -89,7 +94,8 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
     if type=='target':
         '''
         1. co-occurance object1 (4-edge polygon) closest point is WITHIN 0.3 radius, size is urrelevant 
-        2. co-occurance object2 (traingle) position is always to the left of stim
+        2. co-occurance object2 (traingle) position is always to the left of the stim
+        3. co-occurance object3 (circle) position is always lower than the stim
         '''
         radius = np.random.uniform(0.2,0.25) #distance between polygon and stim centroid
         trian_cen = [(np.random.uniform(0.1,locx-0.1), #triangle on the left
@@ -101,6 +107,7 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
         '''
         1. co-occurance object1 (4-edge polygon) closest point is OUTSIDE 0.3 radius, size is urrelevant 
         2. co-occurance object2 (traingle) position is always to the right of stim
+        3. co-occurance object3 (circle) position is always higher than the stim
         '''
         radius = np.random.uniform(0.35,0.4)
         trian_cen = [(np.random.uniform(locx+0.1, 0.9), #triangle on the right
@@ -233,12 +240,11 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
     stim[stim == 0] = .5 # background 0 -> 0.5
     stimuli = stim + sigma * np.random.randn(stim.shape[0], stim.shape[1])
 
-    return stimuli, radius
+    # return stimuli image, [polygon radius to the stim, polygonx,polygony], [trianglex, triangley], [circlex, circley]
+    return stimuli, {"radius":radius, "polygon_cenx":polygon_cenx, "polygon_ceny":polygon_ceny}, \
+           {"trian_cenx":trian_cenx, "trian_ceny":trian_ceny}, {"cir_cenx":cir_cenx, "cir_ceny":cir_ceny}
 
 
-block_num = 1
-n = 10 #number of samples for each block
-N = block_num*n #number of stimuli
 
 ''' create stimuli with feature in various dimensions:
 1. length
@@ -250,7 +256,7 @@ N = block_num*n #number of stimuli
 '''
 # create target stim
 t_shape_mean = [80,38,45]
-t_shape_cov = [[3,0,0],[0,3,0],[0,0,3]]
+t_shape_cov = [[4,0,0],[0,4,0],[0,0,4]]
 t_loc_mean = [0.5, 0.5]
 t_loc_cov = [[.01,0],[0,.01]]
 # target_mins = np.min(targets, 0)
@@ -258,8 +264,8 @@ t_loc_cov = [[.01,0],[0,.01]]
 # targets_range = np.array([target_mins, target_maxs]).round()
 
 # create distractor stim
-d_shape_mean = [73,42,43]
-d_shape_cov = [[3,0,0],[0,3,0],[0,0,3]]
+d_shape_mean = [77,41,42]
+d_shape_cov = [[4,0,0],[0,4,0],[0,0,4]]
 d_loc_mean = [0.6, 0.5]
 d_loc_cov = [[.01,0],[0,.01]]
 # distractors_mins = np.min(distractors, 0)
@@ -273,7 +279,6 @@ d_loc_cov = [[.01,0],[0,.01]]
 # ax.scatter(distractors[:,0], distractors[:,1], distractors[:,2], s=100, c='b')
 
 
-
 # # calculate all possible discrete targets (1200+) and distractors (1200+)
 # num=0
 # for f1 in np.arange(targets_range[0,0], targets_range[1,0]+1):
@@ -283,7 +288,9 @@ d_loc_cov = [[.01,0],[0,.01]]
 # print("all possible discrete targets/distractors: {}".format(num))
 
 
-
+block_num = 1
+n = 50 #number of samples for each block
+N = block_num*n #number of stimuli
 imageSizeX = 255*3
 imageSizeY = 255*3
 stim_info = {}
@@ -299,13 +306,15 @@ for b in range(block_num):# range(int(N/n)):
                             np.random.multivariate_normal(t_loc_mean, t_loc_cov, 1)], 1)[0]
         # print('length: {}, width: {}, angle: {}, locx: {}, locy: {}'.format(lth, wdth, ang, locx, locy))
         loc = [locx, locy]
-        stimuli, polygon_dis = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'target')
+        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'target')
         plt.imshow(stimuli, 'gray')
         plt.axis('off')
         plt.savefig('Stimuli_old/block{}/target{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
         plt.close('all')
-        # stim_info['target{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
-        #                                          'poly_dis':polygon_dis,'corr_ans':1}
+        stim_info['target{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
+                                                 'poly_dis':polygon['radius'], 'poly_x':polygon['polygon_cenx'], 'poly_y':polygon['polygon_ceny'], \
+                                                 'triangle_x':triangle['trian_cenx'],
+                                                 'circle_y':circle['cir_ceny'], 'corr_ans':1}
 
 
         print('creating distractor {}'.format(i + 1))
@@ -316,49 +325,101 @@ for b in range(block_num):# range(int(N/n)):
             np.concatenate([np.random.multivariate_normal(d_shape_mean, d_shape_cov, 1).round(),
                             np.random.multivariate_normal(d_loc_mean, d_loc_cov, 1)], 1)[0]
         # print('length: {}, width: {}, angle: {}, locx: {}, locy: {}'.format(lth, wdth, ang, locx, locy))
-        stimuli, polygon_dis = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor')
+        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor')
         plt.imshow(stimuli, 'gray')
         plt.axis('off')
         plt.savefig('Stimuli_old/block{}/distractor{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
         plt.close('all')
 
-        # # creating feedback for distractors (compare to targets)
-        # # pdf = multivariate_normal.pdf([lth, wdth, ang], mean=t_mean, cov=t_cov)
-        # # length
-        # # p_d = norm.cdf(lth, loc=d_mean[0], scale=d_cov[0][0]) # cdf of lth given distractor distribution
-        # p_t = norm.cdf(lth, loc=t_mean[0], scale=t_cov[0][0]) # cdf of lth given target distribution
-        # if p_t >= .7: # most target is smaller
-        #     feedback = "This is a distractor. Most targets have shorter length, "
-        # elif p_t <= .3: # most target is smaller
-        #     feedback = "This is a distractor. Most targets have longer length, "
-        # else: # around 50% target is
-        #     feedback = "This is a distractor. Most targets have similar length, "
-        #
-        # # width
-        # p_t = norm.cdf(wdth, loc=t_mean[1], scale=t_cov[1][1])  # cdf of wdth given target distribution
-        # if p_t >= .7:
-        #     feedback += "have smaller width, "
-        # elif p_t <= .3:
-        #     feedback += "have larger width, "
-        # else:
-        #     feedback += "have similar width, "
-        #
-        # # orientation
-        # p_t = norm.cdf(ang, loc=t_mean[2], scale=t_cov[2][2])  # cdf of angle given target distribution
-        # if p_t >= .7:
-        #     feedback += "oriented more horizontally."
-        # elif p_t <= .3:
-        #     feedback += "oriented more vertically."
-        # else:
-        #     feedback += "with similar orientation."
-        #
-        # stim_info['distractor{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
-        #                                          'poly_dis':polygon_dis, 'feedback':feedback, 'corr_ans':0}
+        # creating feedback for distractors (compare to targets)
+        pdf = multivariate_normal.pdf([lth, wdth, ang], mean=t_shape_mean, cov=t_shape_cov)
+        # length
+        p_d = norm.cdf(lth, loc=d_shape_mean[0], scale=d_shape_cov[0][0]) # cdf of lth given distractor distribution
+        p_t = norm.cdf(lth, loc=t_shape_mean[0], scale=t_shape_cov[0][0]) # cdf of lth given target distribution
+        if p_t >= .7: # most target is smaller
+            feedback = "This is a distractor. Most targets have shorter length, "
+        elif p_t <= .3: # most target is smaller
+            feedback = "This is a distractor. Most targets have longer length, "
+        else: # around 50% target is
+            feedback = "This is a distractor. Most targets have similar length, "
 
-# df = pd.DataFrame(stim_info).T
-# df = df.reset_index()
-# df.rename(columns={'index':'stim'}, inplace=True)
-# df.to_excel('Stimuli_old/stim_info.xlsx', index=None)
+        # width
+        p_t = norm.cdf(wdth, loc=t_shape_mean[1], scale=t_shape_cov[1][1])  # cdf of wdth given target distribution
+        if p_t >= .7:
+            feedback += "have smaller width, "
+        elif p_t <= .3:
+            feedback += "have larger width, "
+        else:
+            feedback += "have similar width, "
+
+        # orientation
+        p_t = norm.cdf(ang, loc=t_shape_mean[2], scale=t_shape_cov[2][2])  # cdf of angle given target distribution
+        if p_t >= .7:
+            feedback += "oriented more horizontally."
+        elif p_t <= .3:
+            feedback += "oriented more vertically."
+        else:
+            feedback += "with similar orientation."
+
+        # target: 4-edge polygon radius<0.3, triangle to the left, circle to the bottom
+        # 1. co-occurance object1 (4-edge polygon) closest point is WITHIN 0.3 radius, size is urrelevant
+        # 2. co-occurance object2 (traingle) position is always to the left of the stim
+        # 3. co-occurance object3 (circle) position is always lower than the stim
+        feedback += "\n The 4-edge polygon should be closer to the stimuli. \n" \
+                    "The triangle position should be more to the left. \n" \
+                    "The circle position should be lower."
+
+        stim_info['distractor{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
+                                                 'poly_dis':polygon['radius'], 'poly_x':polygon['polygon_cenx'], 'poly_y':polygon['polygon_ceny'], \
+                                                 'triangle_x':triangle['trian_cenx'],
+                                                 'circle_y':circle['cir_ceny'], \
+                                                 'feedback':feedback, 'corr_ans':0}
+
+df = pd.DataFrame(stim_info).T
+df = df.reset_index()
+df.rename(columns={'index':'stim'}, inplace=True)
+df.to_excel('Stimuli_old/stim_info.xlsx', index=None)
+
+
+
+''' create stimuli examples: '''
+#length
+lth, wdth, ang = 80, 47, 45
+stim1 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
+stim2 = get_stimuli(lth+30, wdth, ang, loc, imageSizeX, imageSizeY)
+stim1, stim2 = add_noise(stim1), add_noise(stim2)
+plt.imshow(stim1, 'gray')
+plt.axis('off')
+plt.savefig('Stimuli_old/examples/length_short.jpg', bbox_inches='tight', pad_inches=0)
+plt.imshow(stim2, 'gray')
+plt.axis('off')
+plt.savefig('Stimuli_old/examples/length_long.jpg', bbox_inches='tight', pad_inches=0)
+plt.close('all')
+
+#width
+stim1 = get_stimuli(lth, wdth-20, ang, loc, imageSizeX, imageSizeY)
+stim2 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
+stim1, stim2 = add_noise(stim1), add_noise(stim2)
+plt.imshow(stim1, 'gray')
+plt.axis('off')
+plt.savefig('Stimuli_old/examples/width_small.jpg', bbox_inches='tight', pad_inches=0)
+plt.imshow(stim2, 'gray')
+plt.axis('off')
+plt.savefig('Stimuli_old/examples/width_large.jpg', bbox_inches='tight', pad_inches=0)
+plt.close('all')
+
+#orientation
+stim1 = get_stimuli(lth, wdth, ang-20, loc, imageSizeX, imageSizeY)
+stim2 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
+stim1, stim2 = add_noise(stim1), add_noise(stim2)
+plt.imshow(stim1, 'gray')
+plt.axis('off')
+plt.savefig('Stimuli_old/examples/angle_hori.jpg', bbox_inches='tight', pad_inches=0)
+plt.imshow(stim2, 'gray')
+plt.axis('off')
+plt.savefig('Stimuli_old/examples/angle_verti.jpg', bbox_inches='tight', pad_inches=0)
+plt.close('all')
+
 
 #
 #
