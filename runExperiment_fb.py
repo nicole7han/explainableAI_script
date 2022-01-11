@@ -12,7 +12,7 @@ import os, sys, glob, json
 
 # set up path
 current_path = os.path.abspath(os.getcwd())
-stim_path = "{}/Stimuli_old".format(current_path)
+stim_path = "{}/Stimuli".format(current_path)
 data_path = "{}/Data".format(current_path)
 script_path = current_path
 
@@ -49,8 +49,8 @@ else:
 
 
 #check subject previous blocks
-if os.path.isdir(data_path + os.sep + "Data"+ os.sep + 'subj' +expInfo['Participant'])==False:
-    os.mkdir(data_path + os.sep + "Data"+ os.sep + 'subj' +expInfo['Participant'])
+if os.path.isdir(data_path + os.sep + 'subj' +expInfo['Participant'])==False:
+    os.mkdir(data_path + os.sep + 'subj' +expInfo['Participant'])
 subj_files = glob.glob(data_path + os.sep + "Data" + os.sep + 'subj' + expInfo['Participant'] + os.sep +"*.xlsx")
 num_blocks = len(subj_files)
 continue_last = False
@@ -73,7 +73,7 @@ else:
 expInfo['Block_num'] = block_num
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-filename = data_path + os.sep + u'data' + os.sep + 'subj' + expInfo['Participant'] + os.sep +'subj'+ '%s_%s_%s_%s' %(expInfo['Participant'], expInfo['Block_num'], expInfo['Age'], expInfo['Gender'])
+filename = data_path + os.sep + 'subj' + expInfo['Participant'] + os.sep +'subj'+ '%s_%s_%s_%s' %(expInfo['Participant'], expInfo['Block_num'], expInfo['Age'], expInfo['Gender'])
 
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
@@ -446,7 +446,6 @@ for thisTrial in trials:
                                                       color=[1, 1, 1], colorSpace='rgb', opacity=1,
                                                       depth=0.0)
                         feedbk_text.draw()
-
         event.clearEvents()
         trial_iter = trial_iter+1
 dataFile.to_excel(filename+'.xlsx', index = None)
