@@ -426,8 +426,7 @@ for thisTrial in trials:
                         feedbk_text.draw()
 
                     elif corrAns == 0 and resp == 1: # false positive trials
-                        explan = stim_info.loc[stim_info['stim']==os.path.split(thisTrial['image'])[-1][:-4]]['feedback'].item()
-                        feedback_text = "Incorrect!"+ explan
+                        feedback_text = "Incorrect! This is a distractor."
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
@@ -437,8 +436,7 @@ for thisTrial in trials:
                         feedbk_text.draw()
 
                     elif corrAns == 0 and resp == 0: # correct rejection trials
-                        explan = stim_info.loc[stim_info['stim']==os.path.split(thisTrial['image'])[-1][:-4]]['feedback'].item()
-                        feedback_text = "Correct! " + explan
+                        feedback_text = "Correct! This is a distractor."
                         feedbk_text = visual.TextStim(win=win, name='feedback',
                                                       text=feedback_text,
                                                       font='Arial',
