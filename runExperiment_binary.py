@@ -73,7 +73,7 @@ else:
 expInfo['Block_num'] = block_num
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
-filename = data_path + os.sep + 'subj' + expInfo['Participant'] + os.sep +'subj'+ '%s_%s_%s_%s' %(expInfo['Participant'], expInfo['Block_num'], expInfo['Age'], expInfo['Gender'])
+filename = data_path + os.sep + 'subj' + expInfo['Participant'] + os.sep +'subj'+ '%s_%s_%s_%s_binary' %(expInfo['Participant'], expInfo['Block_num'], expInfo['Age'], expInfo['Gender'])
 
 endExpNow = False  # flag for 'escape' or other condition => quit the exp
 
