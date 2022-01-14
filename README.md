@@ -1,7 +1,7 @@
 
 # explainableAI_script
 
-Intructions for research assistants in the VIU lab to run psychopy experiment.
+Intructions for participants. You will receive a confirmation email with a zoom link. A research assistant will go through the experiment during sign-up session time help answering any questions you have.
 
 ## Set up
 1. download and install psychopy3: from:https://www.psychopy.org/download.html
