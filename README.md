@@ -22,7 +22,7 @@ Intructions for participants. You will receive a confirmation email with a zoom 
 3. once you open the file, click "run experiment" button on the top
 <img width="429" alt="Screen Shot 2021-07-14 at 9 31 17 AM" src="./README_figures/run.png">
 
-4. Put in your subject name, select age and gender to start. Repeat this process for 6 times and make sure you always put the exact same subject name (e.g., "1") each time.
+4. Put in your subject name, select age and gender to start. Repeat this process for 5 times and make sure you always put the exact same subject name (e.g., "1") each time.
 
 
 
