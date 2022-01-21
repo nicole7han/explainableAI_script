@@ -30,7 +30,7 @@ allresp.to_excel('Data/Human_resp_{}.xlsx'.format(cond))
 subj_mean = allresp.groupby(['subject','block_num']).mean().reset_index()
 subj_mean['correct'] = subj_mean['correct']*100
 sns_setup_small(sns)
-ax = sns.lineplot(x = 'block_num', y = 'correct', data = subj_mean)
+ax = sns.lineplot(x = 'block_num', y ='correct', data = subj_mean, hue='subject')
 ax.set(xlabel='block number', ylabel='percentage correct (%)',
        ylim= [40,80])
 ax.figure.savefig("Figures_{}/PC_vs_block_{}.png".format(cond, cond))
@@ -39,7 +39,7 @@ plt.close()
 
 # Confidence over time
 sns_setup_small(sns)
-ax = sns.lineplot(x = 'block_num', y = 'conf', data = subj_mean)
+ax = sns.lineplot(x = 'block_num', y = 'conf', data = subj_mean, hue='subject')
 ax.set(xlabel='block number', ylabel='confidence level',
        ylim= [1,5])
 ax.figure.savefig("Figures_{}/conf_vs_block.png".format(cond))
@@ -59,23 +59,23 @@ for i,f in enumerate(features):
     # if i==0:
     #     axes[i,0].set_title("ground truth")
 
-    io_ptrials = io_resp.groupby([f]).mean().reset_index()
-    sns.lineplot(x=io_ptrials[f], y=io_ptrials['gt'], ax=axes[i, 0])
+    # io_ptrials = io_resp.groupby([f]).mean().reset_index()
+    # sns.lineplot(x=io_ptrials[f], y=io_ptrials['gt'], ax=axes[i, 0])
     if i==0:
         axes[i,0].set_title("IO")
     axes[i,0].set(ylabel='% target trials ({})'.format(f))
 
     for b in range(6):
-        try:
-            aic = round(aics[(aics['block_num']==(b+1)) & (aics['feature']==f)]['aic'].item(),1)
-        except: pass
+        # try:
+        #     aic = round(aics[(aics['block_num']==(b+1)) & (aics['feature']==f)]['aic'].item(),1)
+        # except: pass
         b_resp = allresp[allresp['block_num'] == (b + 1)]
         ptrials = b_resp.groupby(['subject', f]).mean().reset_index()
         sns.lineplot(x=ptrials[f], y=ptrials['resp'], ax=axes[i, b+1])
         axes[i, b+1].set(xlabel='',ylabel='')
-        try:
-            axes[i, b+1].text(0.1, 0.9, 'aic={}'.format(aic), fontsize=13, transform=axes[i, b+1].transAxes)
-        except: pass
+        # try:
+        #     axes[i, b+1].text(0.1, 0.9, 'aic={}'.format(aic), fontsize=13, transform=axes[i, b+1].transAxes)
+        # except: pass
         axes[i, b+1].xaxis.set_visible(False)
         axes[i, b+1].yaxis.set_visible(False)
         if i == 0:
