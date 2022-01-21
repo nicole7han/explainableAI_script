@@ -113,7 +113,7 @@ def plot_tuningcurve(resp, filename):
 
 
 def organize_humanresp(data_path, subject):
-    stim_info = pd.read_excel('Stimuli_old/stim_info.xlsx')
+    stim_info = pd.read_excel('Stimuli/stim_info.xlsx')
     files = glob.glob('{}/{}/*'.format(data_path, subject))
     num_block = len(files)
     print('subject {} has {} blocks'.format(subject, num_block))

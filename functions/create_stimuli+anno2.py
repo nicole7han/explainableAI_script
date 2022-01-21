@@ -93,27 +93,51 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
     stimxy = np.stack([stim_xs, stim_ys],1)
     if type=='target':
         '''
-        1. co-occurance object1 (4-edge polygon) closest point is WITHIN 0.3 radius, size is urrelevant 
-        2. co-occurance object2 (traingle) position is always to the left of the stim
-        3. co-occurance object3 (circle) position is always lower than the stim
+        1. co-occurance object1 (4-edge polygon) closest point is WITHIN 0.3 radius (p=0.7), size is urrelevant 
+        2. co-occurance object2 (traingle) position is to the left of the stim (p=0.7)
+        3. co-occurance object3 (circle) position is lower than the stim (p=0.7)
         '''
-        radius = np.random.uniform(0.2,0.25) #distance between polygon and stim centroid
-        trian_cen = [(np.random.uniform(0.1,locx-0.1), #triangle on the left
-                      np.random.uniform(0.1,0.9))]
-        circle_cen = [(np.random.uniform(0.1,0.9), #circle on the bottom
-                      np.random.uniform(locy+0.1,0.9))]
+        if np.random.uniform(0,1) <=0.7: radius = np.random.uniform(0.2,0.3) #distance between polygon and stim centroid
+        else: radius = np.random.uniform(0.3,0.4)
+
+        if np.random.uniform(0, 1) <= 0.7:
+            trian_cen = [(np.random.uniform(0.1,locx-0.1), #triangle on the left
+                          np.random.uniform(0.1,0.9))]
+        else:
+            trian_cen = [(np.random.uniform(locx+0.1, 0.9), #triangle on the right
+                      np.random.uniform(0.1, 0.9))]
+
+        if np.random.uniform(0, 1) <= 0.7:
+            circle_cen = [(np.random.uniform(0.1,0.9), #circle on the bottom
+                          np.random.uniform(locy+0.1,0.9))]
+        else:
+            circle_cen = [(np.random.uniform(0.1, 0.9),  # circle on the top
+                           np.random.uniform(0, locy - 0.1))]
+        print(circle_cen)
         print('creating target with polygon distance {} < 0.3'.format(radius))
+
     elif type=='distractor':
         '''
-        1. co-occurance object1 (4-edge polygon) closest point is OUTSIDE 0.3 radius, size is urrelevant 
-        2. co-occurance object2 (traingle) position is always to the right of stim
-        3. co-occurance object3 (circle) position is always higher than the stim
+        1. co-occurance object1 (4-edge polygon) closest point is OUTSIDE 0.3 radius (p=0.7), size is urrelevant 
+        2. co-occurance object2 (traingle) position is to the right of stim (p=0.7)
+        3. co-occurance object3 (circle) position is higher than the stim (p=0.7)
         '''
-        radius = np.random.uniform(0.35,0.4)
-        trian_cen = [(np.random.uniform(locx+0.1, 0.9), #triangle on the right
-                      np.random.uniform(0.1, 0.9))]
-        circle_cen = [(np.random.uniform(0.1,0.9), #circle on the top
-                      np.random.uniform(0, locy-0.1))]
+        if np.random.uniform(0, 1) <= 0.7: radius = np.random.uniform(0.3,0.4)
+        else: radius = np.random.uniform(0.2,0.3)
+
+        if np.random.uniform(0, 1) <= 0.7:
+            trian_cen = [(np.random.uniform(locx+0.1, 0.9), #triangle on the right
+                          np.random.uniform(0.1, 0.9))]
+        else:
+            trian_cen = [(np.random.uniform(0.1, locx - 0.1),  # triangle on the left
+                          np.random.uniform(0.1, 0.9))]
+
+        if np.random.uniform(0, 1) <= 0.7:
+            circle_cen = [(np.random.uniform(0.1,0.9), #circle on the top
+                          np.random.uniform(0, locy-0.1))]
+        else:
+            circle_cen = [(np.random.uniform(0.1, 0.9),  # circle on the bottom
+                           np.random.uniform(locy + 0.1, 0.9))]
         print('creating distractor with polygon distance {} > 0.3'.format(radius))
     else:
         print("cannot recognize this type of stimuli")
@@ -213,7 +237,7 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
         if itr <= maxitr and num_centers<=maxcenters:
             # print('triangle x: {}, y:'.format(trian_cenx, trian_ceny))
             itr += 1
-            cir_r = np.random.uniform(0, 0.15) # polygon radius
+            cir_r = np.random.uniform(0.05, 0.08) # polygon radius
             poly_stim = np.zeros(stim.shape)
             poly_stim = cv2.circle(poly_stim, (int(cir_cenx*imageSizeX), int(cir_ceny*imageSizeY)),
                                    int(cir_r*imageSizeX), [1,1,1], -1)
@@ -288,14 +312,14 @@ d_loc_cov = [[.01,0],[0,.01]]
 # print("all possible discrete targets/distractors: {}".format(num))
 
 
-block_num = 1
-n = 50 #number of samples for each block
+block_num = 5
+n = 100 #number of samples for each block
 N = block_num*n #number of stimuli
 imageSizeX = 255*3
 imageSizeY = 255*3
 stim_info = {}
 for b in range(block_num):# range(int(N/n)):
-    os.makedirs('Stimuli_old/block{}'.format(b+1), exist_ok=True)
+    os.makedirs('Stimuli/block{}'.format(b+1), exist_ok=True)
     for i in range(n):
         print('creating target {}'.format(i+1))
         lth, wdth, ang, locx, locy = np.concatenate([np.random.multivariate_normal(t_shape_mean, t_shape_cov, 1).round(),
@@ -309,7 +333,7 @@ for b in range(block_num):# range(int(N/n)):
         stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'target')
         plt.imshow(stimuli, 'gray')
         plt.axis('off')
-        plt.savefig('Stimuli_old/block{}/target{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
+        plt.savefig('Stimuli/block{}/target{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
         plt.close('all')
         stim_info['target{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
                                                  'poly_dis':polygon['radius'], 'poly_x':polygon['polygon_cenx'], 'poly_y':polygon['polygon_ceny'], \
@@ -328,7 +352,7 @@ for b in range(block_num):# range(int(N/n)):
         stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor')
         plt.imshow(stimuli, 'gray')
         plt.axis('off')
-        plt.savefig('Stimuli_old/block{}/distractor{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
+        plt.savefig('Stimuli/block{}/distractor{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
         plt.close('all')
 
         # creating feedback for distractors (compare to targets)
@@ -378,47 +402,47 @@ for b in range(block_num):# range(int(N/n)):
 df = pd.DataFrame(stim_info).T
 df = df.reset_index()
 df.rename(columns={'index':'stim'}, inplace=True)
-df.to_excel('Stimuli_old/stim_info.xlsx', index=None)
+df.to_excel('Stimuli/stim_info.xlsx', index=None)
 
-
-
-''' create stimuli examples: '''
-#length
-lth, wdth, ang = 80, 47, 45
-stim1 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
-stim2 = get_stimuli(lth+30, wdth, ang, loc, imageSizeX, imageSizeY)
-stim1, stim2 = add_noise(stim1), add_noise(stim2)
-plt.imshow(stim1, 'gray')
-plt.axis('off')
-plt.savefig('Stimuli_old/examples/length_short.jpg', bbox_inches='tight', pad_inches=0)
-plt.imshow(stim2, 'gray')
-plt.axis('off')
-plt.savefig('Stimuli_old/examples/length_long.jpg', bbox_inches='tight', pad_inches=0)
-plt.close('all')
-
-#width
-stim1 = get_stimuli(lth, wdth-20, ang, loc, imageSizeX, imageSizeY)
-stim2 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
-stim1, stim2 = add_noise(stim1), add_noise(stim2)
-plt.imshow(stim1, 'gray')
-plt.axis('off')
-plt.savefig('Stimuli_old/examples/width_small.jpg', bbox_inches='tight', pad_inches=0)
-plt.imshow(stim2, 'gray')
-plt.axis('off')
-plt.savefig('Stimuli_old/examples/width_large.jpg', bbox_inches='tight', pad_inches=0)
-plt.close('all')
-
-#orientation
-stim1 = get_stimuli(lth, wdth, ang-20, loc, imageSizeX, imageSizeY)
-stim2 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
-stim1, stim2 = add_noise(stim1), add_noise(stim2)
-plt.imshow(stim1, 'gray')
-plt.axis('off')
-plt.savefig('Stimuli_old/examples/angle_hori.jpg', bbox_inches='tight', pad_inches=0)
-plt.imshow(stim2, 'gray')
-plt.axis('off')
-plt.savefig('Stimuli_old/examples/angle_verti.jpg', bbox_inches='tight', pad_inches=0)
-plt.close('all')
+#
+#
+# ''' create stimuli examples: '''
+# #length
+# lth, wdth, ang = 80, 47, 45
+# stim1 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
+# stim2 = get_stimuli(lth+30, wdth, ang, loc, imageSizeX, imageSizeY)
+# stim1, stim2 = add_noise(stim1), add_noise(stim2)
+# plt.imshow(stim1, 'gray')
+# plt.axis('off')
+# plt.savefig('Stimuli/examples/length_short.jpg', bbox_inches='tight', pad_inches=0)
+# plt.imshow(stim2, 'gray')
+# plt.axis('off')
+# plt.savefig('Stimuli/examples/length_long.jpg', bbox_inches='tight', pad_inches=0)
+# plt.close('all')
+#
+# #width
+# stim1 = get_stimuli(lth, wdth-20, ang, loc, imageSizeX, imageSizeY)
+# stim2 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
+# stim1, stim2 = add_noise(stim1), add_noise(stim2)
+# plt.imshow(stim1, 'gray')
+# plt.axis('off')
+# plt.savefig('Stimuli/examples/width_small.jpg', bbox_inches='tight', pad_inches=0)
+# plt.imshow(stim2, 'gray')
+# plt.axis('off')
+# plt.savefig('Stimuli/examples/width_large.jpg', bbox_inches='tight', pad_inches=0)
+# plt.close('all')
+#
+# #orientation
+# stim1 = get_stimuli(lth, wdth, ang-20, loc, imageSizeX, imageSizeY)
+# stim2 = get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY)
+# stim1, stim2 = add_noise(stim1), add_noise(stim2)
+# plt.imshow(stim1, 'gray')
+# plt.axis('off')
+# plt.savefig('Stimuli/examples/angle_hori.jpg', bbox_inches='tight', pad_inches=0)
+# plt.imshow(stim2, 'gray')
+# plt.axis('off')
+# plt.savefig('Stimuli/examples/angle_verti.jpg', bbox_inches='tight', pad_inches=0)
+# plt.close('all')
 
 
 #
