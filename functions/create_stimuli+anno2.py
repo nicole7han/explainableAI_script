@@ -224,6 +224,7 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08,
             if (type == 'target' and np.random.uniform(0,1)<= p) or (type=='distractor' and np.random.uniform(0,1)>p):
                 trian_cen = [(np.random.uniform(0, np.max(locx-0.1,0)),  # triangle on the left
                               np.random.uniform(0.1, 0.9))]
+                print('trian_cenx')
             else:
                 trian_cen = [(np.random.uniform(np.min([locx+0.1,1]), 0.9),  # triangle on the right
                               np.random.uniform(0.1, 0.9))]
@@ -233,9 +234,6 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08,
             break
     # print('3-edge polygon size: {}'.format(poly_size))
     stim = cv2.fillPoly(stim, [poly_points], True, 1)
-
-    print(type)
-    print('triangle cenx {}'.format(trian_cenx))
 
     ''' draw circle '''
     cir_cenx, cir_ceny = circle_cen[0]
@@ -321,8 +319,8 @@ d_loc_cov = [[.01,0],[0,.01]]
 # print("all possible discrete targets/distractors: {}".format(num))
 
 
-block_num = 1
-n = 50 #number of samples for each block
+block_num = 5
+n =100 #number of samples for each block
 N = block_num*n #number of stimuli
 imageSizeX = 255*3
 imageSizeY = 255*3
@@ -357,6 +355,7 @@ for b in range(block_num):# range(int(N/n)):
             lth, wdth, ang, locx, locy = \
             np.concatenate([np.random.multivariate_normal(d_shape_mean, d_shape_cov, 1).round(),
                             np.random.multivariate_normal(d_loc_mean, d_loc_cov, 1)], 1)[0]
+        loc = [locx, locy]
         # print('length: {}, width: {}, angle: {}, locx: {}, locy: {}'.format(lth, wdth, ang, locx, locy))
         stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor', p=1.1)
         plt.imshow(stimuli, 'gray')
