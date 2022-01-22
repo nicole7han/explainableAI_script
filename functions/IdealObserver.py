@@ -101,19 +101,18 @@ def main():
     imageSizeX = 255*3
     imageSizeY = 255*3
 
-    t_range = [[80 - 6, 80 + 6], [40 - 6, 40 + 6], [45 - 6, 45 + 6]]
-    d_range = [[78 - 6, 78 + 6], [42 - 6, 42 + 6], [43 - 6, 43 + 6]]
+    t_range = [[80 - 6, 80 + 6], [38 - 6, 38 + 6], [45 - 6, 45 + 6]]
+    d_range = [[77 - 6, 77 + 6], [41 - 6, 41 + 6], [42 - 6, 42 + 6]]
     feature_range = np.stack([d_range,t_range])
     t_mean = [80, 40, 45]
-    t_cov = [[3, 0, 0], [0, 3, 0], [0, 0, 3]]
-    d_mean = [78, 42, 43]
-    d_cov = [[3, 0, 0], [0, 3, 0], [0, 0, 3]]
+    t_cov = [[4,0,0],[0,4,0],[0,0,4]]
+    d_mean = [77, 41, 42]
+    d_cov = [[4,0,0],[0,4,0],[0,0,4]]
     means = np.stack([d_mean,t_mean])
     covs = np.stack([d_cov,t_cov])
 
     # set up signal matrices
     setupsignal(imageSizeX, imageSizeY, means, covs, feature_range)
-
 
     sigmas= [.08]
     df = pd.DataFrame()

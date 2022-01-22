@@ -337,7 +337,7 @@ for b in range(block_num):# range(int(N/n)):
                             np.random.multivariate_normal(t_loc_mean, t_loc_cov, 1)], 1)[0]
         # print('length: {}, width: {}, angle: {}, locx: {}, locy: {}'.format(lth, wdth, ang, locx, locy))
         loc = [locx, locy]
-        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'target', p=1.1)
+        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'target', p=.7)
         plt.imshow(stimuli, 'gray')
         plt.axis('off')
         plt.savefig('Stimuli/block{}/target{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
@@ -357,7 +357,7 @@ for b in range(block_num):# range(int(N/n)):
                             np.random.multivariate_normal(d_loc_mean, d_loc_cov, 1)], 1)[0]
         loc = [locx, locy]
         # print('length: {}, width: {}, angle: {}, locx: {}, locy: {}'.format(lth, wdth, ang, locx, locy))
-        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor', p=1.1)
+        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor', p=.7)
         plt.imshow(stimuli, 'gray')
         plt.axis('off')
         plt.savefig('Stimuli/block{}/distractor{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)

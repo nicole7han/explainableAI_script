@@ -59,7 +59,7 @@ def get_stimuli(lth, wth, ang, imageSizeX, imageSizeY, sigma=.08):
     return img, stimuli
 
 def setupsignal(imageSizeX, imageSizeY, means, covs, feature_range):
-    img_yrang,img_xrang = [300,460], [300,460]
+    img_yrang,img_xrang = [0,imageSizeX], [0,imageSizeY]
     n_class = feature_range.shape[0]
     prior = 1/n_class #default same prior
 
@@ -113,7 +113,7 @@ def plot_tuningcurve(resp, filename):
 
 
 def organize_humanresp(data_path, subject):
-    stim_info = pd.read_excel('Stimuli_old/stim_info.xlsx')
+    stim_info = pd.read_excel('Stimuli/stim_info.xlsx')
     files = glob.glob('{}/{}/*'.format(data_path, subject))
     num_block = len(files)
     print('subject {} has {} blocks'.format(subject, num_block))
@@ -121,7 +121,7 @@ def organize_humanresp(data_path, subject):
     b = 1
     for f in files:
         resp = pd.read_excel(f)
-        length, width, angle = [],[],[]
+        length, width, angle, trianlx, cirly, polylr = [],[],[],[],[],[]
         for r in resp.iterrows():
             trial = stim_info[stim_info['stim'] == os.path.split(r[1][0])[-1][:-4]]
             if len(trial)==0:
@@ -129,9 +129,15 @@ def organize_humanresp(data_path, subject):
             length.append(trial['length'].item())
             width.append(trial['width'].item())
             angle.append(trial['angle'].item())
+            polylr.append(int(trial['polylr'].item()))
+            trianlx.append(int(trial['trianlx'].item())) #target triangle lower x position (lower value)
+            cirly.append(int(trial['cirly'].item()))  #target circle lower y position (higher value)
         resp['length'] = length
         resp['width'] = width
         resp['angle'] = angle
+        resp['polylr'] = polylr #lower radius
+        resp['trianlx'] = trianlx #lower x
+        resp['cirly'] = cirly #lower y
         resp['block_num'] = b
         b +=1
         allresp = allresp.append(resp, ignore_index=True)
