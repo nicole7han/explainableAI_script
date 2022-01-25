@@ -188,7 +188,8 @@ cooccurance = visual.ImageStim(
     colorSpace='rgb', opacity=1
 )
 cooccuranceText = visual.TextStim(win=win, name='examText',
-    text="The stimuli would have three co-occurance objects in various locations: 1.a four-edge polygon. 2.a triangle. 3.a circle.",
+    text="The stimuli would have four objects with various in their shapes, sizes and locations: \n\
+    1.a four-edge polygon. 2.a triangle. 3.a circle. 4.an elipse",
     font='Arial',
     units='pix', pos=[0, 300], height=30, wrapWidth=850, ori=0,
     color=[1,1,1], colorSpace='rgb', opacity=1,
@@ -264,48 +265,48 @@ while ContinueThisRoutine :
         break
 
 """ Present Examples """
-ContinueThisRoutine = True
-examText.setAutoDraw(True)
-length1.setAutoDraw(True)
-lengthText1.setAutoDraw(True)
-length2.setAutoDraw(True)
-lengthText2.setAutoDraw(True)
-width1.setAutoDraw(True)
-widthText1.setAutoDraw(True)
-width2.setAutoDraw(True)
-widthText2.setAutoDraw(True)
-angle1.setAutoDraw(True)
-angleText1.setAutoDraw(True)
-angle2.setAutoDraw(True)
-angleText2.setAutoDraw(True)
-
-# show examples
-while ContinueThisRoutine:
-    theseKeys = event.getKeys(keyList=['escape', 'space'])
-    if "escape" in theseKeys:
-        dlg = gui.Dlg(title='quit experiment?', screen=-1)
-        dlg.addText('Are you sure you want to quit the experiment?')
-        dlg.show()
-        if dlg.OK:
-            dataFile.to_excel(filename + '.xlsx', index = None)
-            core.quit()
-    if "space" in theseKeys:
-        examText.setAutoDraw(False)
-        length1.setAutoDraw(False)
-        lengthText1.setAutoDraw(False)
-        length2.setAutoDraw(False)
-        lengthText2.setAutoDraw(False)
-        width1.setAutoDraw(False)
-        widthText1.setAutoDraw(False)
-        width2.setAutoDraw(False)
-        widthText2.setAutoDraw(False)
-        angle1.setAutoDraw(False)
-        angleText1.setAutoDraw(False)
-        angle2.setAutoDraw(False)
-        angleText2.setAutoDraw(False)
-        ContinueThisRoutine = False
-        break
-    win.flip()
+#ContinueThisRoutine = True
+#examText.setAutoDraw(True)
+#length1.setAutoDraw(True)
+#lengthText1.setAutoDraw(True)
+#length2.setAutoDraw(True)
+#lengthText2.setAutoDraw(True)
+#width1.setAutoDraw(True)
+#widthText1.setAutoDraw(True)
+#width2.setAutoDraw(True)
+#widthText2.setAutoDraw(True)
+#angle1.setAutoDraw(True)
+#angleText1.setAutoDraw(True)
+#angle2.setAutoDraw(True)
+#angleText2.setAutoDraw(True)
+#
+## show examples
+#while ContinueThisRoutine:
+#    theseKeys = event.getKeys(keyList=['escape', 'space'])
+#    if "escape" in theseKeys:
+#        dlg = gui.Dlg(title='quit experiment?', screen=-1)
+#        dlg.addText('Are you sure you want to quit the experiment?')
+#        dlg.show()
+#        if dlg.OK:
+#            dataFile.to_excel(filename + '.xlsx', index = None)
+#            core.quit()
+#    if "space" in theseKeys:
+#        examText.setAutoDraw(False)
+#        length1.setAutoDraw(False)
+#        lengthText1.setAutoDraw(False)
+#        length2.setAutoDraw(False)
+#        lengthText2.setAutoDraw(False)
+#        width1.setAutoDraw(False)
+#        widthText1.setAutoDraw(False)
+#        width2.setAutoDraw(False)
+#        widthText2.setAutoDraw(False)
+#        angle1.setAutoDraw(False)
+#        angleText1.setAutoDraw(False)
+#        angle2.setAutoDraw(False)
+#        angleText2.setAutoDraw(False)
+#        ContinueThisRoutine = False
+#        break
+#    win.flip()
 
 
 # show co-occurance
