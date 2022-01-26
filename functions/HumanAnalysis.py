@@ -23,7 +23,9 @@ for subj in subjects:
     resp['subject'] = subj_name[4:]
     resp['correct'] = resp.apply(label_correct, axis=1)
     allresp = allresp.append(resp, ignore_index=True)
-allresp.to_excel('Data/Human_resp_{}.xlsx'.format(cond))
+allresp['trian_dis'] = allresp['trian_dis'].round(2)
+allresp['circle_r'] = allresp['circle_r'].round(2)
+allresp.to_excel('Data/Human_resp_{}.xlsx'.format(cond), index=None)
 allresp = pd.read_excel('Data/Human_resp_{}.xlsx'.format(cond))
 
 # PC over time
@@ -32,7 +34,7 @@ subj_mean['correct'] = subj_mean['correct']*100
 sns_setup_small(sns)
 ax = sns.lineplot(x = 'block_num', y ='correct', data = subj_mean, hue='subject')
 ax.set(xlabel='block number', ylabel='percentage correct (%)',
-       ylim= [40,80])
+       ylim= [40,90])
 ax.figure.savefig("Figures_{}/PC_vs_block_{}.png".format(cond, cond))
 plt.close()
 
@@ -41,7 +43,7 @@ plt.close()
 sns_setup_small(sns)
 ax = sns.lineplot(x = 'block_num', y = 'conf', data = subj_mean, hue='subject')
 ax.set(xlabel='block number', ylabel='confidence level',
-       ylim= [1,5])
+       ylim= [0,5])
 ax.figure.savefig("Figures_{}/conf_vs_block.png".format(cond))
 plt.close()
 
@@ -49,21 +51,19 @@ plt.close()
 
 # percentage of responding target
 subjects = np.unique(allresp['subject'])
-features = ['length','width','angle','polylr','trianlx','cirly']
+features = ['length','width','angle','trian_dis','circle_r']
 fig, axes = plt.subplots(nrows=len(features), ncols=6, figsize=(15, 10))
 sns_setup_small(sns)
-
 for i,f in enumerate(features):
     f_ptrials = allresp.groupby([f]).mean().reset_index()
     sns.lineplot(x=f_ptrials[f], y=f_ptrials['gt'], ax=axes[i, 0])
     if i==0:
         axes[i,0].set_title("ground truth")
-
     # io_ptrials = io_resp.groupby([f]).mean().reset_index()
     # sns.lineplot(x=io_ptrials[f], y=io_ptrials['gt'], ax=axes[i, 0])
     # if i==0:
     #     axes[i,0].set_title("IO")
-    axes[i,0].set(ylabel='%target ({})'.format(f))
+    axes[i,0].set(xlabel='', ylabel='{}'.format(f))
 
     for b in np.arange(1,6):
         # try:
@@ -71,7 +71,11 @@ for i,f in enumerate(features):
         # except: pass
         b_resp = allresp[allresp['block_num'] == (b)]
         ptrials = b_resp.groupby(['subject', f]).mean().reset_index()
-        sns.lineplot(x=ptrials[f], y=ptrials['resp'], ax=axes[i, b])
+        if i==0 and b==5:
+            sns.lineplot(data=ptrials, x=f, y='resp', hue='subject', ax=axes[i, b])
+            axes[i, b].legend(title='',bbox_to_anchor=(1.05, 1.2))
+        else:
+            sns.lineplot(data=ptrials, x=f, y='resp', hue='subject', ax=axes[i, b], legend=None)
         axes[i, b].set(xlabel='',ylabel='')
         # try:
         #     axes[i, b+1].text(0.1, 0.9, 'aic={}'.format(aic), fontsize=13, transform=axes[i, b+1].transAxes)
@@ -80,8 +84,7 @@ for i,f in enumerate(features):
         axes[i, b].yaxis.set_visible(False)
         if i == 0:
             axes[i, b].set_title("block {}".format(b))
-
-# plt.tight_layout()
+fig.text(0.04, 0.5, 'Proportion of Target', va='center', rotation='vertical')
 plt.savefig('Figures_nfb/tuningcurve_subjmean.jpg')
 plt.close(fig)
 
