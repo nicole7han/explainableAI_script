@@ -41,7 +41,7 @@ def get_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY):
     :rtype: numpy array
     '''
     if loc is None:
-        print('no location given, default as center')
+        # print('no location given, default as center')
         locx, locy= int((imageSizeX + 1) / 2), int((imageSizeY + 1) / 2)
     else:
         locx, locy = int(loc[0] * imageSizeX), int(loc[1] * imageSizeY)
@@ -100,10 +100,10 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
         3. co-occurance object3 (circle) r=0.1 (sd=0.02)
         '''
         trian_dis = np.random.normal(0.3, 0.05) # triangle distance
-        circle_r = np.random.normal(0.08, 0.02) # circle size (radius)
+        circle_r = np.random.normal(0.05, 0.02) # circle size (radius)
 
-        print('creating target with triangle distance {}'.format(trian_dis))
-        print('creating target with circle radius {} '.format(circle_r))
+        # print('creating target with triangle distance {}'.format(trian_dis))
+        # print('creating target with circle radius {} '.format(circle_r))
 
     elif type=='distractor':
         '''
@@ -112,21 +112,24 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
         3. co-occurance object3 (circle) r=0.15 (sd=0.02)
         '''
         trian_dis = np.random.normal(0.4, 0.05) # triangle distance
-        circle_r = np.random.normal(0.13, 0.02) # circle size (radius)
+        circle_r = np.random.normal(0.07, 0.02) # circle size (radius)
 
-        print('creating target with triangle distance {}'.format(trian_dis))
-        print('creating target with circle radius {} '.format(circle_r))
+        # print('creating target with triangle distance {}'.format(trian_dis))
+        # print('creating target with circle radius {} '.format(circle_r))
     else:
         print("cannot recognize this type of stimuli")
         return
 
-    radius = np.random.uniform(0.2,0.45)
-    polygon_cen = random.sample(list(points_on_circle(radius, imageSizeX, imageSizeY, x0=locx, y0=locy)),
-                                1)  # randomly sample centroid to the location of the stimulus
     maxcenters = 50 #maxium new polygon center
     maxitr = 5
 
     ''' draw 4-edge polygons '''
+    radius = np.random.uniform(0.15,0.45)
+    try:
+        polygon_cen = random.sample(list(points_on_circle(radius, imageSizeX, imageSizeY, x0=locx, y0=locy)),
+                                1)  # randomly sample centroid to the location of the stimulus
+    except:
+        return
     polygon_cenx, polygon_ceny = polygon_cen[0]
     itr = 0
     poly_size = 0
@@ -138,7 +141,12 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
             num_edges = 4
             for edge in range(num_edges - 1):
                 poly_r = np.random.uniform(0, 120 / imageSizeX)  # find 2 radiuses from the polygon centroids
-                point = random.sample(list(points_on_circle(poly_r, imageSizeX, imageSizeY, x0=polygon_cenx, y0=polygon_ceny)), 1)[0]
+                try:
+                    point = random.sample(list(points_on_circle(poly_r, imageSizeX, imageSizeY, x0=polygon_cenx, y0=polygon_ceny)), 1)[0]
+                except:
+                    poly_r = np.random.uniform(0, 120 / imageSizeX)
+                    point = random.sample(
+                        list(points_on_circle(poly_r, imageSizeX, imageSizeY, x0=polygon_cenx, y0=polygon_ceny)), 1)[0]
                 poly_points.append(np.array(point))
             # last point is determined by the centroid
             point = np.array(polygon_cen[0]) * num_edges - np.array(poly_points).sum(0)
@@ -162,7 +170,7 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
     # print('4-edge polygon size: {}'.format(poly_size))
     stim = cv2.fillPoly(stim, [poly_points], True, 1)
 
-    print('creating polygon distance {}'.format(radius))
+    # print('creating polygon distance {}'.format(radius))
 
     ''' draw triangles '''
     trian_cen = random.sample(list(points_on_circle(trian_dis, imageSizeX, imageSizeY, x0=locx, y0=locy)),
@@ -195,13 +203,13 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
             trian_cenx, trian_ceny = trian_cen[0]
         elif num_centers>maxcenters:
             # print("can't find good stim in this position {}".format(trian_cen))
-            break
+            return
     # print('3-edge polygon size: {}'.format(poly_size))
     stim = cv2.fillPoly(stim, [poly_points], True, 1)
 
 
     ''' draw circle '''
-    circle_dis = np.random.uniform(0.2,0.5)
+    circle_dis = np.random.uniform(0.1,0.5)
     circle_cen = random.sample(list(points_on_circle(circle_dis, imageSizeX, imageSizeY, x0=locx, y0=locy)),
                                 1)  # randomly sample centroid to the location of the stimulus
     cir_cenx, cir_ceny = circle_cen[0]
@@ -209,24 +217,29 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
     itr = 0
     poly_size = 0
     num_centers = 0
-    while poly_size<0.005*imageSizeX*imageSizeY or overlap==1: #check polygon size
+    while poly_size==0 or overlap==1: #check polygon size
+        # print('circle size {}, overlap {}'.format(poly_size, overlap))
         if itr <= maxitr and num_centers<=maxcenters:
             # print('triangle x: {}, y:'.format(trian_cenx, trian_ceny))
             itr += 1
             poly_stim = np.zeros(stim.shape)
-            poly_stim = cv2.circle(poly_stim, (int(cir_cenx*imageSizeX), int(cir_ceny*imageSizeY)),
+            try:
+                poly_stim = cv2.circle(poly_stim, (int(cir_cenx*imageSizeX), int(cir_ceny*imageSizeY)),
                                    int(cir_r*imageSizeX), [1,1,1], -1)
+            except:
+                return
             poly_size = poly_stim.sum()
             overlap = 1 if (stim*poly_stim).sum()>0 else 0
         elif itr >maxitr and num_centers<=maxcenters:
             itr = 0 #resample another new center
             num_centers +=1
+            circle_dis = np.random.uniform(0.1, 0.5)
             circle_cen = random.sample(list(points_on_circle(circle_dis, imageSizeX, imageSizeY, x0=locx, y0=locy)),
                           1)
             cir_cenx, cir_ceny = circle_cen[0]
         elif num_centers>maxcenters:
-            # print("can't find good stim in this position {}".format(trian_cen))
-            break
+            print("can't find good circle in this position {}".format(circle_cen))
+            return
     # print('circle size: {}'.format(poly_size))
     stim = stim + poly_stim
 
@@ -284,16 +297,17 @@ d_loc_cov = [[.01,0],[0,.01]]
 # print("all possible discrete targets/distractors: {}".format(num))
 
 
-block_num = 2
-n = 250 #number of samples for each block
+block_num = 1 #4
+n = 1000 #number of samples for each block
 N = block_num*n #number of stimuli
 imageSizeX = 255*3
 imageSizeY = 255*3
 stim_info = {}
-for b in range(block_num):# range(int(N/n)):
+for b in np.arange(1,1+block_num):# range(int(N/n)):
     os.makedirs('Stimuli/block{}'.format(b+1), exist_ok=True)
-    for i in range(n):
-        print('creating target {}'.format(i+1))
+    i=0
+    while i<n:
+        # print('i = {}'.format(i))
         lth, wdth, ang, locx, locy = np.concatenate([np.random.multivariate_normal(t_shape_mean, t_shape_cov, 1).round(),
                           np.random.multivariate_normal(t_loc_mean, t_loc_cov, 1)],1)[0]
         while locx<50/imageSizeX or locy<50/imageSizeY or locx>(imageSizeX-50)/imageSizeX or locy>(imageSizeY-50)/imageSizeY:
@@ -302,18 +316,21 @@ for b in range(block_num):# range(int(N/n)):
                             np.random.multivariate_normal(t_loc_mean, t_loc_cov, 1)], 1)[0]
         # print('length: {}, width: {}, angle: {}, locx: {}, locy: {}'.format(lth, wdth, ang, locx, locy))
         loc = [locx, locy]
-        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'target')
-        plt.imshow(stimuli, 'gray')
-        plt.axis('off')
-        plt.savefig('Stimuli/block{}/target{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
-        plt.close('all')
-        stim_info['target{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
-                                                 'poly_dis':polygon['radius'], 'poly_x':polygon['polygon_cenx'], 'poly_y':polygon['polygon_ceny'], \
-                                                 'trian_dis':triangle['trian_dis'],'triangle_x':triangle['trian_cenx'],'triangle_y':triangle['trian_ceny'],\
-                                                 'circle_r':circle['circle_r'],'circle_x':circle['cir_cenx'],'circle_y':circle['cir_ceny'], 'corr_ans':1}
+        try:
+            stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'target')
+            plt.imshow(stimuli, 'gray')
+            plt.axis('off')
+            plt.savefig('Stimuli/block{}/target{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
+            plt.close('all')
+            stim_info['target{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
+                                                     'poly_dis':polygon['radius'], 'poly_x':polygon['polygon_cenx'], 'poly_y':polygon['polygon_ceny'], \
+                                                     'trian_dis':triangle['trian_dis'],'triangle_x':triangle['trian_cenx'],'triangle_y':triangle['trian_ceny'],\
+                                                     'circle_r':circle['circle_r'],'circle_x':circle['cir_cenx'],'circle_y':circle['cir_ceny'], 'corr_ans':1}
+        except:
+            print ('recreating target {}'.format(i))
+            continue
 
-
-        print('creating distractor {}'.format(i + 1))
+        # print('creating distractor {}'.format(i + 1))
         lth, wdth, ang, locx, locy  = np.concatenate([np.random.multivariate_normal(d_shape_mean, d_shape_cov, 1).round(),
                           np.random.multivariate_normal(d_loc_mean, d_loc_cov, 1)],1)[0]
         while locx<50/imageSizeX or locy<50/imageSizeY or locx>(imageSizeX-50)/imageSizeX or locy>(imageSizeY-50)/imageSizeY:
@@ -322,12 +339,15 @@ for b in range(block_num):# range(int(N/n)):
                             np.random.multivariate_normal(d_loc_mean, d_loc_cov, 1)], 1)[0]
         loc = [locx, locy]
         # print('length: {}, width: {}, angle: {}, locx: {}, locy: {}'.format(lth, wdth, ang, locx, locy))
-        stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor')
-        plt.imshow(stimuli, 'gray')
-        plt.axis('off')
-        plt.savefig('Stimuli/block{}/distractor{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
-        plt.close('all')
-
+        try:
+            stimuli, polygon, triangle, circle = create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, 'distractor')
+            plt.imshow(stimuli, 'gray')
+            plt.axis('off')
+            plt.savefig('Stimuli/block{}/distractor{}.jpg'.format(b+1,n*b+i+1),  bbox_inches='tight', pad_inches=0)
+            plt.close('all')
+        except:
+            print ('recreating distractor {}'.format(i))
+            continue
         # creating feedback for distractors (compare to targets)
         pdf = multivariate_normal.pdf([lth, wdth, ang], mean=t_shape_mean, cov=t_shape_cov)
         # length
@@ -383,11 +403,13 @@ for b in range(block_num):# range(int(N/n)):
                                                  'trian_dis':triangle['trian_dis'],'triangle_x':triangle['trian_cenx'],'triangle_y':triangle['trian_ceny'],\
                                                  'circle_r':circle['circle_r'],'circle_x':circle['cir_cenx'],'circle_y':circle['cir_ceny'],
                                                  'feedback':feedback, 'corr_ans':0}
+        i +=1
+        # print('i={} end'.format(i))
 
-df = pd.DataFrame(stim_info).T
-df = df.reset_index()
-df.rename(columns={'index':'stim'}, inplace=True)
-df.to_excel('Stimuli/stim_info.xlsx', index=None)
+    df = pd.DataFrame(stim_info).T
+    df = df.reset_index()
+    df.rename(columns={'index':'stim'}, inplace=True)
+    df.to_excel('Stimuli/stim_info_block{}.xlsx'.format(b+1), index=None)
 
 #
 #
