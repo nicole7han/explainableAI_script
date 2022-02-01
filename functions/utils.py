@@ -118,10 +118,11 @@ def organize_humanresp(data_path, subject):
     num_block = len(files)
     print('subject {} has {} blocks'.format(subject, num_block))
     allresp = pd.DataFrame()
-    b = 1
+    # b = 1
+    f_idx = 0
     for f in files:
         resp = pd.read_excel(f)
-        length, width, angle, trianlx, cirly, polylr = [],[],[],[],[],[]
+        length, width, angle, trian_dis, circle_r = [],[],[],[],[]
         for r in resp.iterrows():
             trial = stim_info[stim_info['stim'] == os.path.split(r[1][0])[-1][:-4]]
             if len(trial)==0:
@@ -129,18 +130,15 @@ def organize_humanresp(data_path, subject):
             length.append(trial['length'].item())
             width.append(trial['width'].item())
             angle.append(trial['angle'].item())
-            polylr.append(int(trial['polylr'].item()))
-            trianlx.append(int(trial['trianlx'].item())) #target triangle lower x position (lower value)
-            cirly.append(int(trial['cirly'].item()))  #target circle lower y position (higher value)
+            trian_dis.append(trial['trian_dis'].item()) #target triangle lower x position (lower value)
+            circle_r.append(trial['circle_r'].item())  #target circle lower y position (higher value)
         resp['length'] = length
         resp['width'] = width
         resp['angle'] = angle
-        resp['polylr'] = polylr #lower radius
-        resp['trianlx'] = trianlx #lower x
-        resp['cirly'] = cirly #lower y
-        resp['block_num'] = b
-        b +=1
+        resp['trian_dis'] = trian_dis #triangle_distance
+        resp['circle_r'] = circle_r #circle radius
+        # resp['block_num'] = r[0]//200+1 #200 trials per block
         allresp = allresp.append(resp, ignore_index=True)
-
+    allresp['block_num'] = allresp.index//200+1 #200 trials per block
     allresp = allresp.rename(columns = {'corr_ans':'gt'})
     return allresp

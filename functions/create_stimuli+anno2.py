@@ -100,7 +100,7 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
         3. co-occurance object3 (circle) r=0.1 (sd=0.02)
         '''
         trian_dis = np.random.normal(0.3, 0.05) # triangle distance
-        circle_r = np.random.normal(0.05, 0.02) # circle size (radius)
+        circle_r = np.random.normal(0.05, 0.01) # circle size (radius)
 
         # print('creating target with triangle distance {}'.format(trian_dis))
         # print('creating target with circle radius {} '.format(circle_r))
@@ -112,7 +112,7 @@ def create_stimuli(lth, wdth, ang, loc, imageSizeX, imageSizeY, type, sigma=.08)
         3. co-occurance object3 (circle) r=0.15 (sd=0.02)
         '''
         trian_dis = np.random.normal(0.4, 0.05) # triangle distance
-        circle_r = np.random.normal(0.07, 0.02) # circle size (radius)
+        circle_r = np.random.normal(0.07, 0.01) # circle size (radius)
 
         # print('creating target with triangle distance {}'.format(trian_dis))
         # print('creating target with circle radius {} '.format(circle_r))
@@ -275,7 +275,7 @@ t_loc_cov = [[.01,0],[0,.01]]
 # create distractor stim
 d_shape_mean = [77,41,42]
 d_shape_cov = [[4,0,0],[0,4,0],[0,0,4]]
-d_loc_mean = [0.6, 0.5]
+d_loc_mean = [0.5, 0.5]
 d_loc_cov = [[.01,0],[0,.01]]
 # distractors_mins = np.min(distractors, 0)
 # distractors_maxs = np.max(distractors, 0)
@@ -296,14 +296,14 @@ d_loc_cov = [[.01,0],[0,.01]]
 #             num+=1
 # print("all possible discrete targets/distractors: {}".format(num))
 
-
-block_num = 1 #4
-n = 1000 #number of samples for each block
+block_start = 0
+block_num = 2
+n = 250 #number of samples for each block
 N = block_num*n #number of stimuli
 imageSizeX = 255*3
 imageSizeY = 255*3
 stim_info = {}
-for b in np.arange(1,1+block_num):# range(int(N/n)):
+for b in np.arange(block_start,block_start+block_num):# range(int(N/n)):
     os.makedirs('Stimuli/block{}'.format(b+1), exist_ok=True)
     i=0
     while i<n:
@@ -406,10 +406,10 @@ for b in np.arange(1,1+block_num):# range(int(N/n)):
         i +=1
         # print('i={} end'.format(i))
 
-    df = pd.DataFrame(stim_info).T
-    df = df.reset_index()
-    df.rename(columns={'index':'stim'}, inplace=True)
-    df.to_excel('Stimuli/stim_info_block{}.xlsx'.format(b+1), index=None)
+df = pd.DataFrame(stim_info).T
+df = df.reset_index()
+df.rename(columns={'index':'stim'}, inplace=True)
+df.to_excel('Stimuli/stim_info.xlsx', index=None)
 
 #
 #

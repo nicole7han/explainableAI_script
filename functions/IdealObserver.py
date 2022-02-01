@@ -101,13 +101,20 @@ def main():
     imageSizeX = 255*3
     imageSizeY = 255*3
 
-    t_range = [[80 - 6, 80 + 6], [38 - 6, 38 + 6], [45 - 6, 45 + 6]]
-    d_range = [[77 - 6, 77 + 6], [41 - 6, 41 + 6], [42 - 6, 42 + 6]]
+    t_range = [[80 - 6, 80 + 6], [38 - 6, 38 + 6], [45 - 6, 45 + 6],
+               [round(0.3*imageSizeX)-125, round(0.3*imageSizeX)+125],
+               [round(0.05*imageSizeX)-25, round(0.05*imageSizeX)+25]]
+    d_range = [[77 - 6, 77 + 6], [41 - 6, 41 + 6], [42 - 6, 42 + 6],
+               [round(0.4*imageSizeX)-125, round(0.4*imageSizeX)+125],
+               [round(0.07*imageSizeX)-25, round(0.07*imageSizeX)+25]]
     feature_range = np.stack([d_range,t_range])
-    t_mean = [80, 40, 45]
-    t_cov = [[4,0,0],[0,4,0],[0,0,4]]
-    d_mean = [77, 41, 42]
-    d_cov = [[4,0,0],[0,4,0],[0,0,4]]
+
+    t_mean = [80,38,45,0.3*imageSizeX,0.05*imageSizeX] # length, width, orientation, triangle distance, circle radius
+    t_cov = [[4,0,0,0,0],[0,4,0,0,0],[0,0,4,0,0],[0,0,0,0.0025*imageSizeX**2,0],[0,0,0,0,0.0001*imageSizeX**2]]
+    t_trian_dis = np.random.normal(0.3, 0.05)
+
+    d_mean = [77,41,42,0.4*imageSizeX,0.07*imageSizeX] # length, width, orientation, triangle distance, circle radius
+    d_cov = [[4,0,0,0,0],[0,4,0,0,0],[0,0,4,0,0],[0,0,0,0.0025*imageSizeX**2,0],[0,0,0,0,0.0001*imageSizeX**2]]
     means = np.stack([d_mean,t_mean])
     covs = np.stack([d_cov,t_cov])
 

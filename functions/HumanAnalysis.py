@@ -34,7 +34,7 @@ subj_mean['correct'] = subj_mean['correct']*100
 sns_setup_small(sns)
 ax = sns.lineplot(x = 'block_num', y ='correct', data = subj_mean, hue='subject')
 ax.set(xlabel='block number', ylabel='percentage correct (%)',
-       ylim= [40,90])
+       ylim= [40,100])
 ax.figure.savefig("Figures_{}/PC_vs_block_{}.png".format(cond, cond))
 plt.close()
 
@@ -85,7 +85,7 @@ for i,f in enumerate(features):
         if i == 0:
             axes[i, b].set_title("block {}".format(b))
 fig.text(0.04, 0.5, 'Proportion of Target', va='center', rotation='vertical')
-plt.savefig('Figures_nfb/tuningcurve_subjmean.jpg')
+plt.savefig('Figures_nfb/tuningcurve_subj.jpg')
 plt.close(fig)
 
 
