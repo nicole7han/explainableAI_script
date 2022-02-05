@@ -297,8 +297,8 @@ d_loc_cov = [[.01,0],[0,.01]]
 # print("all possible discrete targets/distractors: {}".format(num))
 
 block_start = 0
-block_num = 2
-n = 250 #number of samples for each block
+block_num = 1
+n = 5000 #number of samples for each block
 N = block_num*n #number of stimuli
 imageSizeX = 255*3
 imageSizeY = 255*3
@@ -354,20 +354,20 @@ for b in np.arange(block_start,block_start+block_num):# range(int(N/n)):
         p_d = norm.cdf(lth, loc=d_shape_mean[0], scale=d_shape_cov[0][0]) # cdf of lth given distractor distribution
         p_t = norm.cdf(lth, loc=t_shape_mean[0], scale=t_shape_cov[0][0]) # cdf of lth given target distribution
         if p_t >= .7: # most target is smaller
-            feedback = "This is a distractor. Most targets' elipses should have shorter length, "
+            feedback = "This image corresponds to Category B. Most Category A images contain ellipses with shorter length, "
         elif p_t <= .3: # most target is smaller
-            feedback = "This is a distractor. Most targets' elipses should have longer length, "
+            feedback = "This image corresponds to Category B. Most Category A images contain ellipses with longer length, "
         else: # around 50% target is
-            feedback = "This is a distractor. Most targets' elipses should have similar length, "
+            feedback = "This image corresponds to Category B. Most Category A images contain ellipses with similar length, "
 
         # width
         p_t = norm.cdf(wdth, loc=t_shape_mean[1], scale=t_shape_cov[1][1])  # cdf of wdth given target distribution
         if p_t >= .7:
-            feedback += "have smaller width, "
+            feedback += "smaller width, "
         elif p_t <= .3:
-            feedback += "have larger width, "
+            feedback += "larger width, "
         else:
-            feedback += "have similar width, "
+            feedback += "similar width, "
 
         # orientation
         p_t = norm.cdf(ang, loc=t_shape_mean[2], scale=t_shape_cov[2][2])  # cdf of angle given target distribution
@@ -376,27 +376,27 @@ for b in np.arange(block_start,block_start+block_num):# range(int(N/n)):
         elif p_t <= .3:
             feedback += "oriented more vertically."
         else:
-            feedback += "with similar orientation."
+            feedback += "and similar orientation."
 
         # target: 4-edge polygon radius<0.3, triangle to the left, circle to the bottom
         # co-occurance object2 (traingle) distance is target: d~N(0.3, 0.05)
         p_t = norm.cdf(triangle['trian_dis'], loc=0.3, scale=0.05)  # cdf of triangle distance given target distribution
         if p_t >= .7:
-            feedback += "\n The triangle should be closer to the elipse."
+            feedback += "\n Most triangles are closer to the ellipse."
         elif p_t <= .3:
-            feedback += "\n The triangle should be farther away from the elipse."
+            feedback += "\n Most triangles are farther away from the ellipse."
         else:
-            pass
+            feedback += "\n Most triangles with similar distance to the ellipse."
 
         # co-occurance object3 (circle) radius is target: r~N(0.08, 0.02)
         "The circle position should be lower."
         p_t = norm.cdf(circle['circle_r'], loc=0.08, scale=0.02)  # cdf of circle radius given target distribution
         if p_t >= .7:
-            feedback += "\n The circle should be smaller."
+            feedback += "\n Most circles should be smaller in size."
         elif p_t <= .3:
-            feedback += "\n The circle should be larger."
+            feedback += "\n Most circles should be larger in size."
         else:
-            pass
+            feedback += "\n Most circles are similar in size."
 
         stim_info['distractor{}'.format(n*b+i+1)] = {'length':lth, 'width':wdth, 'angle':ang, 'stim_x':locx, 'stim_y':locy, \
                                                  'poly_dis':polygon['radius'], 'poly_x':polygon['polygon_cenx'], 'poly_y':polygon['polygon_ceny'], \

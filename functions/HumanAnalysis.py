@@ -25,6 +25,7 @@ for subj in subjects:
     allresp = allresp.append(resp, ignore_index=True)
 allresp['trian_dis'] = allresp['trian_dis'].round(2)
 allresp['circle_r'] = allresp['circle_r'].round(2)
+allresp['subject'] = allresp['subject'].astype('str')
 allresp.to_excel('Data/Human_resp_{}.xlsx'.format(cond), index=None)
 allresp = pd.read_excel('Data/Human_resp_{}.xlsx'.format(cond))
 
